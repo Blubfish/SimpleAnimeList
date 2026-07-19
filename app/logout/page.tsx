@@ -21,10 +21,10 @@ export default function LogOut() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 backdrop-blur-md">
       <div className="relative w-full max-w-sm rounded-2xl border border-slate-700/60 bg-slate-900/90 p-8 shadow-2xl shadow-black/60 backdrop-blur-xl">
-        <div className="pointer-events-none absolute -top-px left-1/2 h-px w-3/4 -translate-x-1/2 bg-linear-to-r from-transparent via-orange-400/60 to-transparent" />
+        <div className="pointer-events-none absolute -top-px left-1/2 h-px w-3/4 -translate-x-1/2 bg-linear-to-r from-transparent via-red-400/60 to-transparent" />
 
-        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-400/30">
-          <LogOutIcon className="h-6 w-6 text-orange-400" />
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-red-500/15 ring-1 ring-red-400/30">
+          <LogOutIcon className="h-6 w-6 text-red-400" />
         </div>
 
         <h2 className="text-center text-xl font-bold text-slate-100">
