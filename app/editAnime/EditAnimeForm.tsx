@@ -48,7 +48,7 @@ export default function EditAnimePage({
                   if (isDeleting) return;
                   setDeleteError(null);
                   setIsDeleting(true);
-                  setDeletingConfirmation(false);
+                  
 
                   const result = await handleDelete(animeData.id);
 
@@ -60,7 +60,8 @@ export default function EditAnimePage({
                     setIsDeleting(false);
                     return;
                   }
-
+                  
+                  setDeletingConfirmation(false);
                   router.push("/");
                   router.refresh();
                 }}
