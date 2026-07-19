@@ -78,3 +78,12 @@ export const tagClasses: Record<string, string> = {
   Epic: "bg-amber-500/10 text-amber-200 ring-amber-500/20",
   "High Stakes": "bg-red-500/10 text-red-200 ring-red-500/20",
 };
+
+export const statusClasses: Record<string, string> = {
+  Completed: "text-emerald-200 ring-emerald-500/20",
+  Dropped: "text-rose-200 ring-rose-500/20",
+  Planning: "text-sky-200 ring-sky-500/20",
+  Paused: "text-stone-300 ring-stone-500/20",
+  Current: "text-violet-300 ring-violet-500/20",
+  Repeating: "text-yellow-300 ring-yellow-500/20",
+}

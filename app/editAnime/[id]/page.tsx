@@ -1,7 +1,8 @@
 import EditAnimePageClient from "../EditAnimeForm";
-import { myAnimeList } from "@/lib/getMyAnimeList";
+import getAnimeList from "@/lib/getMyAnimeList";
 import { handleGet } from "../actions";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function EditAnimePage({
   params,
@@ -10,20 +11,18 @@ export default async function EditAnimePage({
 }) {
   const { id } = await params;
 
-  const animeRow = await handleGet(Number(id));
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("access_token")?.value;
+  if (!token) redirect("/");  
 
-  if (!animeRow) return notFound();
+  const animeData = await handleGet(Number(id));
 
-  const anime = {
-    ...animeRow,
-    aniListId: animeRow.anilist_id,
-    episodesWatched: animeRow.episodes_watched ?? 0,
-  };
+  if (!animeData) return notFound();
 
-  const savedAnimeList = await myAnimeList();
+  const savedAnimeList = await getAnimeList("Score: High to Low");
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
       <div
         aria-hidden
         className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-orange-500/20 blur-3xl"
@@ -34,13 +33,13 @@ export default async function EditAnimePage({
       />
 
       <div className="relative mx-auto w-full max-w-6xl space-y-6">
-        <div className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
+        <div className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-2">
               <p className="text-sm uppercase tracking-[0.28em] text-orange-300/80">
                 Edit anime
               </p>
-              <h1 className="bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-4xl font-bold leading-tight text-transparent">
+              <h1 className="bg-linear-to-r from-slate-100 to-slate-300 bg-clip-text text-4xl font-bold leading-tight text-transparent">
                 Update your entry
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-slate-400">
@@ -52,10 +51,9 @@ export default async function EditAnimePage({
         </div>
 
         <div className="space-y-6">
-          <section className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
             <EditAnimePageClient
-              anime={anime}
-              animeID={Number(id)}
+              animeData={animeData}
               savedAnimeList={savedAnimeList}
             />
           </section>

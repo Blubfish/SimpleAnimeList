@@ -1,9 +1,10 @@
 export const allStatus: string[] = [
   "Completed",
-  "Watching",
-  "Plan to Watch",
-  "On Hold",
+  "Current",
+  "Planning",
+  "Paused",
   "Dropped",
+  "Rewatching",
 ];
 
 export const allGenres: string[] = [

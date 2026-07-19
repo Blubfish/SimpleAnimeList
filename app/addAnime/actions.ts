@@ -1,90 +1,73 @@
 "use server";
+import { cookies } from "next/headers";
 
-import { Anime } from "../type";
-import { pool } from "@/lib/lib";
+import { MyAnimeData, SaveResult } from "../type";
 import { revalidatePath } from "next/cache";
+import { toSavePayload } from "@/lib/animeTransform";
 
-export async function handleSubmit(formData: Anime): Promise<void> {
-  const {
-    title,
-    rating,
-    status,
-    note,
-    image,
-    genres,
-    aniListId,
-    episodes,
-    episodesWatched,
-    tags,
-  } = formData;
+const query = `
+  mutation ($mediaId: Int, $status: MediaListStatus, $saveMediaListEntryId: Int, $score: Float, $notes: String, $progress: Int) {
+    SaveMediaListEntry(mediaId: $mediaId, status: $status, id: $saveMediaListEntryId, score: $score, notes: $notes, progress: $progress) {
+      id
+    }
+  }
+`;
 
-  if (!title || typeof title !== "string") {
-    throw new Error("Name is required");
+export async function handleAdd(formData: MyAnimeData): Promise<SaveResult> {
+  const saveData = toSavePayload(formData);
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("access_token")?.value;
+
+  if (!token) {
+    return { success: false, message: "Your session expired. Log in again." };
   }
 
-  if (typeof rating !== "number" || rating < 1 || rating > 10) {
-    throw new Error("Rating must be a number from 1 to 10");
-  }
+  try {
+    const cleanStatus = (formData.status || "").toLowerCase().trim();
+    const statusMap: Record<string, string> = {
+      current: "CURRENT",
+      planning: "PLANNING",
+      completed: "COMPLETED",
+      rewatching: "REPEATING",
+      paused: "PAUSED",
+      dropped: "DROPPED",
+    };
 
-  if (
-    status &&
-    !(
-      status === "Completed" ||
-      status === "Watching" ||
-      status === "Plan to Watch" ||
-      status === "On Hold" ||
-      status === "Dropped"
-    )
-  ) {
-    throw new Error("Invalid status");
-  }
+    const aniListStatus = statusMap[cleanStatus] || "PLANNING";
 
-  if (!image || typeof image !== "string") {
-    throw new Error("Image URL is required");
-  }
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          status: aniListStatus,
+          mediaId: saveData.mediaId,
+          score: saveData.score,
+          notes: saveData.notes,
+          progress: saveData.progress,
+        },
+      }),
+    });
 
-  if (!genres || !Array.isArray(genres)) {
-    throw new Error("Genres is required");
-  }
+    const data = await response.json();
 
-  if (!aniListId || typeof aniListId !== "number") {
-    throw new Error("AniList ID is required");
+    if (!response.ok || data.errors) {
+      console.error("AniList Error details:", data.errors || data);
+      return {
+        success: false,
+        message: data.errors?.[0]?.message || "AniList rejected the save.",
+      };
+    }
+  } catch (error) {
+    console.error("Request failed:", error);
+    return { success: false, message: "Couldn't reach AniList." };
   }
-
-  if (!episodes || typeof episodes !== "number") {
-    throw new Error("Episodes is required");
-  }
-
-  if (!tags || !Array.isArray(tags)) {
-    throw new Error("Tags is required");
-  }
-
-  await pool.query(
-    `INSERT INTO anime (
-      title,
-      rating,
-      status,
-      note,
-      image,
-      genres,
-      anilist_id,
-      episodes,
-      episodes_watched,
-      tags
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-    [
-      title,
-      rating,
-      status,
-      note,
-      image,
-      genres,
-      aniListId,
-      episodes,
-      episodesWatched,
-      tags,
-    ],
-  );
 
   revalidatePath("/");
+  return { success: true };
 }

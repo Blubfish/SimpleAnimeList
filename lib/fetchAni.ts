@@ -11,6 +11,7 @@ export default async function fetchAni(title: string) {
             }
             coverImage {
               extraLarge
+              large
             }
 
             isAdult
@@ -41,7 +42,15 @@ export default async function fetchAni(title: string) {
 
     const data = await response.json();
 
-    return data?.data?.Page.media ?? [];
+    const media = data?.data?.Page.media ?? [];
+    return media.map((anime: any) => ({
+      ...anime,
+      title:
+        anime.title?.romaji ??
+        anime.title?.english ??
+        anime.title?.native ??
+        "",
+    }));
   } catch (error) {
     console.log(error);
   }

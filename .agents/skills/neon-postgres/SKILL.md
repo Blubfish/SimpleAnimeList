@@ -364,7 +364,7 @@ Link: https://neon.com/docs/introduction/ip-allow.md
 
 ## Logical Replication
 
-Use this when integrating CDC pipelines, external Postgres sync, or replication-based data movement.
+Use this when integscore CDC pipelines, external Postgres sync, or replication-based data movement.
 
 Key points:
 

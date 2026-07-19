@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import fetchAni from "../../lib/fetchAni";
 import Image from "next/image";
 import AnimePreview from "./AnimePreview";
-import { Anime, AnimeData, AnimeRow } from "../type";
+import { MyAnimeData, SaveResult } from "../../app/type";
+import { TriangleAlertIcon } from "lucide-react";
 import {
   Combobox,
   ComboboxContent,
@@ -14,43 +15,47 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox";
-import PasswordModal from "./PasswordModal";
-import usePassWordLocked from "./hook/usePasswordLock";
+import { allStatus } from "@/app/constants/animeOptions";
 
 type AnimeFormProps = {
-  anime?: Anime;
-  onSubmit: (formData: Anime) => Promise<void>;
-  savedAnimeList?: AnimeRow[];
+  animeData?: MyAnimeData;
+  onSubmit: (formData: MyAnimeData) => Promise<SaveResult>;
+  savedAnimeList?: MyAnimeData[];
 };
 
 export default function AnimeForm({
-  anime,
+  animeData,
   onSubmit,
   savedAnimeList = [],
 }: AnimeFormProps) {
-  const [formData, setFormData] = useState<Anime>({
-    isAdult: anime?.isAdult ?? true,
-    title: anime?.title ?? "",
-    rating: anime?.rating ?? 1,
-    status: anime?.status ?? "Plan to Watch",
-    note: anime?.note ?? "",
-    image: anime?.image ?? "",
-    genres: anime?.genres ?? [],
-    episodes: anime?.episodes ?? 1,
-    aniListId: anime?.aniListId ?? 1,
-    tags: anime?.tags ?? [],
-    episodesWatched: anime?.episodesWatched ?? 0,
+  const [formData, setFormData] = useState({
+    id: animeData?.id ?? 0,
+    mediaId: animeData?.mediaId ?? 0,
+    status: animeData?.status ?? "Planning",
+    score: animeData?.score ?? 1,
+    progress: animeData?.progress ?? "",
+    notes: animeData?.notes ?? "",
+    title: animeData?.title ?? "",
+    coverImage: animeData?.coverImage ?? { large: "", extraLarge: "" },
+    genres: animeData?.genres ?? [],
+    episodes: animeData?.episodes ?? 0,
+    tags: animeData?.tags ?? [],
+    isAdult: animeData?.isAdult ?? false,
+    description: "",
+    averageScore: 1,
+    popularity: 1,
   });
   const router = useRouter();
-  const [animeOption, setAnimeOption] = useState<AnimeData[]>([]);
+  const [animeOption, setAnimeOption] = useState<MyAnimeData[]>([]);
   const [showOption, setShowOption] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const filterAnime = animeOption.filter(
     (anime) =>
       !anime.isAdult &&
-      !savedAnimeList.some((saved) => saved.anilist_id === anime.id) &&
+      !savedAnimeList.some((saved) => saved.id === anime.id) &&
       anime.episodes,
   );
-  const { isUnlocked, setIsUnlocked } = usePassWordLocked();
 
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
@@ -70,22 +75,30 @@ export default function AnimeForm({
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isSaving) return;
+
+    setSaveError(null);
+    setIsSaving(true);
 
     try {
-      await onSubmit({
+      const result = await onSubmit({
         ...formData,
-        episodesWatched:
-          formData.episodesWatched === "" ? 0 : formData.episodesWatched,
+        progress: Number(formData.progress) || 0,
       });
+
+      if (!result.success) {
+        setSaveError(result.message || "Couldn't save your anime. Try again.");
+        return;
+      }
+
       router.push("/");
       router.refresh();
     } catch (error) {
       console.log(error);
-      alert("Fail To Save Anime");
+      setSaveError("Couldn't save your anime. Try again.");
+    } finally {
+      setIsSaving(false);
     }
-  }
-  if (!isUnlocked) {
-    return <PasswordModal setIsUnlocked={setIsUnlocked} />;
   }
 
   return (
@@ -122,7 +135,7 @@ export default function AnimeForm({
             Suggestions
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
-            {filterAnime.map((anime: AnimeData) => (
+            {filterAnime.map((anime: MyAnimeData) => (
               <button
                 type="button"
                 key={anime.id}
@@ -130,19 +143,10 @@ export default function AnimeForm({
                 onClick={() => {
                   setFormData({
                     ...formData,
-                    title: anime.title.english || anime.title.romaji || "",
-                    image:
-                      anime.coverImage.large ||
-                      anime.coverImage.extraLarge ||
-                      "",
-                    genres: anime.genres,
-                    aniListId: anime.id,
+                    title: anime.title || "",
+                    mediaId: anime.id,
+                    coverImage: anime.coverImage,
                     episodes: anime.episodes,
-                    tags: anime.tags
-                      .filter((tag: { rank: number }) => tag.rank >= 90)
-                      .slice(0, 3)
-                      .map((tag: { name: string }) => tag.name),
-                    isAdult: anime.isAdult,
                   });
                   setShowOption(false);
                 }}
@@ -150,9 +154,7 @@ export default function AnimeForm({
                 <div className="overflow-hidden rounded-lg bg-slate-800 ring-1 ring-slate-700/80">
                   <Image
                     src={anime.coverImage.extraLarge || ""}
-                    alt={
-                      anime.title.english || anime.title.romaji || "Anime cover"
-                    }
+                    alt={anime.title || "Anime cover"}
                     width={120}
                     height={170}
                     className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -160,7 +162,7 @@ export default function AnimeForm({
                   />
                 </div>
                 <p className="line-clamp-2 text-xs font-medium text-slate-200 group-hover:text-orange-200">
-                  {anime.title.english || anime.title.romaji}
+                  {anime.title}
                 </p>
               </button>
             ))}
@@ -168,19 +170,19 @@ export default function AnimeForm({
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold text-slate-200">Rating</p>
+          <p className="text-sm font-semibold text-slate-200">Score</p>
           <Combobox
             items={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
-            onValueChange={(rating) =>
-              setFormData({ ...formData, rating: Number(rating) })
+            onValueChange={(score) =>
+              setFormData({ ...formData, score: Number(score) })
             }
-            value={formData.rating}
+            value={formData.score}
           >
             <ComboboxInput
               readOnly
-              placeholder="Select a rating"
+              placeholder="Select a score"
               className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
             />
             <ComboboxContent className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-red-400 focus-within:ring-orange-400/25">
@@ -203,23 +205,17 @@ export default function AnimeForm({
         <div className="flex flex-col gap-2">
           <p className="text-sm font-semibold text-slate-200">Status</p>
           <Combobox
-            items={[
-              "Completed",
-              "Plan to Watch",
-              "Watching",
-              "On Hold",
-              "Dropped",
-            ]}
+            items={allStatus}
             onValueChange={(status) =>
               setFormData({
                 ...formData,
                 status: status ?? "",
-                episodesWatched:
+                progress:
                   status === "Completed"
                     ? formData.episodes
-                    : status === "Plan to Watch"
+                    : status === "Planning"
                       ? 0
-                      : formData.episodesWatched,
+                      : formData.progress,
               })
             }
             value={formData.status}
@@ -227,7 +223,7 @@ export default function AnimeForm({
             <ComboboxInput
               readOnly
               placeholder="Select a status"
-              className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
+              className="[&_input::placeholder]:text-slate-500 [&_input::placeholder]:opacity-100 min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
             />
             <ComboboxContent className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-orange-400 focus-within:ring-orange-400/25">
               <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -247,28 +243,27 @@ export default function AnimeForm({
         </div>
       </div>
 
-      {["Watching", "Dropped", "On Hold"].includes(formData.status) && (
+      {["Current", "Dropped", "Paused"].includes(formData.status) && (
         <div className="flex flex-col gap-2">
           <label
-            htmlFor="episodesWatchedInput"
+            htmlFor="progressInput"
             className="text-sm font-semibold text-slate-200"
           >
             Episodes Watched
           </label>
           <input
-            id="episodesWatchedInput"
+            id="progressInput"
             type="number"
             min={0}
             max={formData.episodes}
             placeholder="Enter episodes here"
-            value={formData.episodesWatched}
-            onChange={(e) =>
+            value={formData.progress}
+            onChange={(e) => {
               setFormData({
                 ...formData,
-                episodesWatched:
-                  e.target.value === "" ? "" : Number(e.target.value),
-              })
-            }
+                progress: e.target.value,
+              });
+            }}
             className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
           ></input>
         </div>
@@ -279,13 +274,13 @@ export default function AnimeForm({
           htmlFor="shortNoteForm"
           className="text-sm font-semibold text-slate-200"
         >
-          Extra Note
+          Extra notes
         </label>
         <textarea
           id="shortNoteForm"
-          placeholder="Add a short note..."
-          value={formData.note}
-          onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+          placeholder="Add a short notes..."
+          value={formData.notes}
+          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
           rows={4}
           className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
         />
@@ -293,19 +288,30 @@ export default function AnimeForm({
 
       <AnimePreview
         title={formData.title}
-        rating={formData.rating}
+        score={formData.score}
         status={formData.status}
-        note={formData.note}
+        notes={formData.notes}
         episodes={formData.episodes}
-        episodesWatched={formData.episodesWatched}
-        image={formData.image}
+        progress={Number(formData.progress)}
+        coverImage={formData.coverImage.large}
       />
+
+      {saveError && (
+        <div
+          role="alert"
+          className="flex items-center gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+        >
+          <TriangleAlertIcon className="h-5 w-5 shrink-0 text-red-400" />
+          <span>{saveError}</span>
+        </div>
+      )}
 
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
+        disabled={isSaving}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50 disabled:opacity-60"
       >
-        Save Anime
+        {isSaving ? "Saving…" : "Save Anime"}
       </button>
     </form>
   );

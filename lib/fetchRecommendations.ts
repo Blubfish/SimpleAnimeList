@@ -1,4 +1,4 @@
-type animeRecommendation = {
+export type animeRecommendation = {
   mediaRecommendation: {
     id: number;
     title: {
@@ -59,9 +59,17 @@ export default async function fetchRecommendations(id: number) {
 
     const data = await response.json();
 
-    const nodes = data?.data?.Media?.recommendations?.nodes ?? [];
+    const entry = data?.data?.Media?.recommendations?.nodes;
 
-    return nodes.map((n: animeRecommendation) => n.mediaRecommendation);
+    const list = entry.map((n: animeRecommendation) => n.mediaRecommendation).filter(Boolean);
+
+    const flattened = list.map((anime: any) => ({
+      ...anime,
+      title: anime.title.english || anime.title.romanji || "",
+    }));
+
+
+    return flattened;
   } catch (error) {
     console.log(error);
   }

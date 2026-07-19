@@ -1,68 +1,221 @@
 "use server";
 
-import { Anime } from "../type";
-import { pool } from "@/lib/lib";
+import { MyAnimeData, SaveResult } from "../type";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { toSavePayload } from "@/lib/animeTransform";
 
-export async function handleGet(animeID: number) {
-  const result = await pool.query("SELECT * FROM anime WHERE anime_id = $1", [
-    animeID,
-  ]);
+export async function handleGet(mediaId: number) {
+  const cookieStore = cookies();
+  const userId = (await cookieStore).get("userId")?.value;
+  const query = `
+    query ($mediaId: Int, $userId: Int) {
+      MediaList(mediaId: $mediaId, userId: $userId) {
+        id
+        status
+        score
+        progress
+        notes
+        mediaId
+        media {
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+            extraLarge
+          }
+          episodes
+          genres
+          tags {
+            name
+            rank
+          }
+          isAdult
+          description
+          popularity
+          averageScore
+        }
+      }
+    }
+  `;
+  const reverseStatusMap: Record<string, string> = {
+    CURRENT: "Current",
+    PLANNING: "Planning",
+    COMPLETED: "Completed",
+    REPEATING: "Rewatching",
+    PAUSED: "Paused",
+    DROPPED: "Dropped",
+  };
 
-  if (result.rows.length === 0) return null;
+  try {
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          userId: userId,
+          mediaId: mediaId,
+        },
+      }),
+    });
 
-  return result.rows[0];
+    const data = await response.json();
+
+    const entry = data.data.MediaList;
+
+    const flattened = entry
+      ? {
+          id: entry.id,
+          mediaId: entry.mediaId,
+          status: reverseStatusMap[entry.status],
+          score: entry.score,
+          progress: entry.progress,
+          notes: entry.notes,
+          title: entry.media.title.english || entry.media.title.romaji || "",
+          coverImage: entry.media.coverImage,
+          episodes: entry.media.episodes,
+          genres: entry.media.genres,
+          tags: entry.media.tags
+            .filter((tag: { rank: number }) => tag.rank >= 90)
+            .slice(0, 3)
+            .map((tag: { name: string }) => tag.name),
+          isAdult: entry.media.isAdult,
+          description: entry.media.description,
+          popularity: entry.media.popularity,
+          averageScore: entry.media.averageScore,
+        }
+      : null;
+
+    if (!response.ok || data.errors) {
+      console.error("AniList Error details:", data.errors || data);
+      return null;
+    } else {
+      console.log("Successfully Retreive:", flattened);
+      return flattened;
+    }
+  } catch (error) {
+    console.error("Request failed:", error);
+    return null;
+  }
 }
 
-export async function handleDelete(animeID: number): Promise<void> {
-  await pool.query("DELETE FROM anime WHERE anime_id = $1", [animeID]);
-  revalidatePath("/");
+export async function handleDelete(id: number): Promise<SaveResult> {
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("access_token")?.value;
+
+  if (!token) {
+    return { success: false, message: "Your session expired. Log in again." };
+  }
+
+  const query = `
+    mutation ($deleteMediaListEntryId: Int) {
+        DeleteMediaListEntry(id: $deleteMediaListEntryId) {
+          deleted
+        }
+      }
+    `;
+  try {
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          deleteMediaListEntryId: id,
+        },
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.errors) {
+      console.error("AniList Error details:", data.errors || data);
+      return {
+        success: false,
+        message: data.errors?.[0]?.message || "AniList rejected the delete.",
+      };
+    }
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Couldn't reach AniList." };
+  }
 }
 
-export async function handleUpdate(
-  formData: Anime,
-  animeID: number,
-): Promise<void> {
-  const {
-    title,
-    rating,
-    status,
-    note,
-    image,
-    genres,
-    aniListId,
-    episodes,
-    episodesWatched,
-    tags,
-  } = formData;
+export async function handleUpdate(formData: MyAnimeData): Promise<SaveResult> {
+  const saveData = toSavePayload(formData);
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("access_token")?.value;
 
-  await pool.query(
-    `UPDATE anime 
-    SET title = $1,
-        rating = $2,
-        status = $3,
-        note = $4,
-        image = $5,
-        genres = $6,
-        anilist_id = $7,
-        episodes = $8,
-        episodes_watched = $9,
-        tags = $10
-    WHERE anime_id = $11`,
-    [
-      title,
-      rating,
-      status,
-      note,
-      image,
-      genres,
-      aniListId,
-      episodes,
-      episodesWatched,
-      tags,
-      animeID,
-    ],
-  );
+  if (!token) {
+    return { success: false, message: "Your session expired. Log in again." };
+  }
+  const query = `
+      mutation ($mediaId: Int, $status: MediaListStatus, $saveMediaListEntryId: Int, $score: Float, $notes: String, $progress: Int) {
+        SaveMediaListEntry(mediaId: $mediaId, status: $status, id: $saveMediaListEntryId, score: $score, notes: $notes, progress: $progress) {
+          id
+        }
+      }
+    `;
 
-  revalidatePath("/");
+  try {
+    const cleanStatus = (formData.status || "").toLowerCase().trim();
+    const statusMap: Record<string, string> = {
+      current: "CURRENT",
+      planning: "PLANNING",
+      completed: "COMPLETED",
+      rewatching: "REPEATING",
+      paused: "PAUSED",
+      dropped: "DROPPED",
+    };
+
+    const aniListStatus = statusMap[cleanStatus] || "PLANNING";
+
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          status: aniListStatus,
+          mediaId: saveData.mediaId,
+          score: saveData.score,
+          notes: saveData.notes,
+          progress: saveData.progress,
+        },
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.errors) {
+      console.error("AniList Error details:", data.errors || data);
+      return {
+        success: false,
+        message: data.errors?.[0]?.message || "AniList rejected the save.",
+      };
+    }
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Request failed:", error);
+    return { success: false, message: "Couldn't reach AniList." };
+  }
 }

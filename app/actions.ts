@@ -1,5 +1,9 @@
 "use server";
 
-export async function checkPassword(password: string) {
-  return password === process.env.EDIT_PASSWORD;
+import getAnimeList from "@/lib/getMyAnimeList";
+
+export default async function getSortAnimeList(sort: string) {
+  if (!sort) return [];
+  const myAnimeList = await getAnimeList(sort);
+  return myAnimeList;
 }

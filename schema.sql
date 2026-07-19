@@ -1,14 +1,13 @@
-CREATE TABLE anime (
-    anime_id INTEGER GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE anime_cache (
+    anilist_id INTEGER PRIMARY KEY,   -- unique key, no separate auto-generated id needed
     title TEXT NOT NULL,
-    rating INTEGER NOT NULL,
-    status TEXT NOT NULL,
-    note TEXT NOT NULL,
-    image TEXT NOT NULL,
+    description TEXT,
+    image JSONB,
     genres TEXT[] NOT NULL DEFAULT '{}'::text[],
-    anilist_id INTEGER NOT NULL,
-    episodes INTEGER NOT NULL,
     tags TEXT[] NOT NULL DEFAULT '{}'::text[],
-    episodes_watched INTEGER NOT NULL,
-    CONSTRAINT anime_pkey PRIMARY KEY (anime_id)
+    episodes INTEGER,
+    popularity INTEGER,
+    average_score INTEGER,
+    is_adult BOOLEAN,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

@@ -1,51 +1,27 @@
-export type AnimeData = {
+type AnimeListCore = {
+  id: number; // list-entry id
+  mediaId: number; // media id
+  status: string;
+  score: number;
+  progress: number;
+  notes: string | null;
+};
+
+export type SaveAnimeData = Omit<AnimeListCore, "id">;
+
+export type SaveResult = {
+  success: boolean;
+  message?: string;
+};
+
+export type MyAnimeData = AnimeListCore & {
+  title: string;
+  coverImage: { large: string; extraLarge: string };
+  genres: string[];
+  episodes: number;
+  tags: string[];
+  isAdult: boolean;
   description: string;
-  isAdult: boolean;
-  id: number;
-  title: {
-    romaji?: string;
-    english?: string;
-  };
-  coverImage: {
-    large?: string;
-    extraLarge?: string;
-  };
-  genres: string[];
-  aniListId: number;
-  episodes: number;
-  tags: {
-    name: string;
-    rank: number;
-  }[];
-  popularity?: number;
-  favourites?: number;
-  averageScore?: number;
-};
-
-export type Anime = {
-  isAdult: boolean;
-  title: string;
-  rating: number;
-  status: string;
-  note: string;
-  image: string;
-  genres: string[];
-  episodes: number;
-  aniListId: number;
-  tags: string[];
-  episodesWatched: number | "";
-};
-
-export type AnimeRow = {
-  anime_id: number;
-  title: string;
-  rating: number;
-  status: string;
-  note: string | null;
-  image: string;
-  genres: string[];
-  anilist_id: number;
-  episodes: number;
-  tags: string[];
-  episodes_watched: number | "";
+  popularity: number;
+  averageScore: number;
 };
