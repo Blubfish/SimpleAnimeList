@@ -63,7 +63,6 @@ export default async function getAnimeList(sort: string) {
     "Popularity: High to Low": "MEDIA_POPULARITY_DESC",
   };
 
-
   try {
     const response = await fetch("https://graphql.anilist.co", {
       method: "POST",

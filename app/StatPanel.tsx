@@ -42,12 +42,12 @@ export default function StatPanel({ myAnimeList }: StatPanelProps) {
     <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-4 sm:p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
       <div className="mb-4 sm:mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.28em] text-orange-300/80">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
             Anime summary
           </p>
           <h2 className="mt-2 text-2xl font-bold text-slate-100">Your stats</h2>
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="text-xs sm:text-sm text-slate-400">
           Total tracked anime and current status breakdown
         </p>
       </div>
@@ -58,28 +58,28 @@ export default function StatPanel({ myAnimeList }: StatPanelProps) {
             label: "Total anime",
             value: totalAnime,
             accent: "bg-orange-500/10 text-orange-300 ring-orange-500/20",
-            icon: <Layers/>,
+            icon: <Layers />,
             iconColor: "text-orange-300",
           },
           {
             label: "Completed",
             value: totalCompleted,
             accent: "bg-emerald-500/10 text-emerald-200 ring-emerald-500/20",
-            icon: <Check/>,
+            icon: <Check />,
             iconColor: "text-emerald-300",
           },
           {
             label: "Dropped",
             value: totalDropped,
             accent: "bg-rose-500/10 text-rose-200 ring-rose-500/20",
-            icon: <XIcon/>,
+            icon: <XIcon />,
             iconColor: "text-rose-300",
           },
           {
             label: "Planning",
             value: totalPlanned,
             accent: "bg-sky-500/10 text-sky-200 ring-sky-500/20",
-            icon: <SquareChartGanttIcon/>,
+            icon: <SquareChartGanttIcon />,
             iconColor: "text-sky-300",
           },
           {
@@ -116,7 +116,11 @@ export default function StatPanel({ myAnimeList }: StatPanelProps) {
             className={`rounded-2xl p-3.5 sm:p-5 ring-1 ${item.accent} transition`}
           >
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className={`${item.iconColor} [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-5 sm:[&_svg]:w-5`}>{item.icon}</span>
+              <span
+                className={`${item.iconColor} [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-5 sm:[&_svg]:w-5`}
+              >
+                {item.icon}
+              </span>
               <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.15em] sm:tracking-[0.18em] line-clamp-2 truncate">
                 {item.label}
               </p>

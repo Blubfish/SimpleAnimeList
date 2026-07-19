@@ -19,13 +19,13 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
         <p className="text-center text-lg font-semibold text-slate-100">
           Anime information could not be loaded.
         </p>
-        <p className="mt-3 text-center text-sm text-slate-400">
+        <p className="mt-3 text-center text-xs sm:text-sm text-slate-400">
           Please try again or go back to the main page.
         </p>
         <div className="mt-6 text-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40"
+            className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40"
           >
             Back to Home
           </Link>
@@ -60,7 +60,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
 
         <div className="flex-1 space-y-6">
           <div className="space-y-3">
-            <p className="text-sm uppercase tracking-[0.28em] text-orange-300/80">
+            <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
               Anime details
             </p>
             <h1 className="bg-linear-to-r from-slate-100 to-slate-300 bg-clip-text text-4xl font-bold leading-tight text-transparent">
@@ -85,7 +85,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl bg-slate-800/60 p-5 ring-1 ring-slate-700/50 transition">
-              <p className="text-sm uppercase tracking-[0.18em] text-slate-400">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.18em] text-slate-400">
                 Genres
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -99,14 +99,14 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-slate-400">
+                  <span className="text-xs sm:text-sm text-slate-400">
                     No genres available
                   </span>
                 )}
               </div>
             </div>
             <div className="rounded-2xl bg-slate-800/60 p-5 ring-1 ring-slate-700/50 transition">
-              <p className="text-sm uppercase tracking-[0.18em] text-slate-400">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.18em] text-slate-400">
                 Tags
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
@@ -120,7 +120,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
                     </span>
                   ))
                 ) : (
-                  <span className="text-sm text-slate-400">
+                  <span className="text-xs sm:text-sm text-slate-400">
                     No tags available
                   </span>
                 )}
@@ -128,21 +128,21 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl bg-slate-800/60 p-5 ring-1 ring-slate-700/50">
+          <div className="grid gap-4 grid-cols-2">
+            <div className="rounded-2xl bg-slate-800/60 p-5 ring-1 ring-slate-700/50 transition">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-orange-300" />
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-400">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.18em] text-slate-400 ">
                   Popularity
                 </p>
               </div>
-              <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-3xl font-bold text-orange-300">
+              <div className="mt-3 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-2">
+                <span className="text-2xl font-bold leading-tight text-orange-300 sm:text-3xl">
                   {metadata.popularity
                     ? metadata.popularity.toLocaleString()
                     : "N/A"}
                 </span>
-                <span className="text-xs uppercase tracking-[0.15em] text-slate-500">
+                <span className="text-[11px] uppercase tracking-[0.15em] text-slate-500 sm:text-xs">
                   users watched
                 </span>
               </div>
@@ -150,7 +150,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
             <div className="rounded-2xl bg-slate-800/60 p-5 ring-1 ring-slate-700/50">
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-emerald-300" fill="lightGreen" />
-                <p className="text-sm uppercase tracking-[0.18em] text-slate-400">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.18em] text-slate-400">
                   Average Score
                 </p>
               </div>

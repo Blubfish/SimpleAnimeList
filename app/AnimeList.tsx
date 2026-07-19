@@ -2,7 +2,11 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { genreClasses, tagClasses, statusClasses } from "../components/ui/colorStyles";
+import {
+  genreClasses,
+  tagClasses,
+  statusClasses,
+} from "../components/ui/colorStyles";
 import Link from "next/link";
 import { allStatus, allGenres, allTags } from "./constants/animeOptions";
 import FilterForm from "../components/ui/FilterForm";
@@ -38,12 +42,11 @@ export default function AnimeList({ animeList }: AnimeListProps) {
         anime.genres.some((genre: string) => genreFilter.includes(genre))),
   );
 
-
   return (
     <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.28em] text-orange-300/80">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
             Your library
           </p>
           <h2 className="mt-2 text-2xl font-bold text-slate-100">All anime</h2>
@@ -51,7 +54,7 @@ export default function AnimeList({ animeList }: AnimeListProps) {
         <div className="flex flex-col gap-2 sm:items-start">
           <Link
             href="/addAnime"
-            className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
+            className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
           >
             <Plus color="black"> </Plus>
             Add Anime
@@ -63,7 +66,7 @@ export default function AnimeList({ animeList }: AnimeListProps) {
         <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-100">Filters</h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-xs sm:text-sm text-slate-500">
               Refine the list by status, genre, or tag
             </p>
           </div>
@@ -76,7 +79,7 @@ export default function AnimeList({ animeList }: AnimeListProps) {
           <div className="space-y-2 col-span-2 xl:col-span-1">
             <label
               htmlFor="searchAnimeName"
-              className="block text-sm font-semibold text-slate-200"
+              className="block text-xs sm:text-sm font-semibold text-slate-200"
             >
               Search
             </label>
@@ -86,36 +89,38 @@ export default function AnimeList({ animeList }: AnimeListProps) {
               placeholder="Search by anime name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="min-h-11 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-slate-100 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
+              className="min-h-11 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-xs sm:text-sm text-slate-100 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
             />
           </div>
           <div className="space-y-2">
-            <p className="block text-sm font-semibold text-slate-100 ">Order</p>
+            <p className="block text-xs sm:text-sm font-semibold text-slate-100 ">
+              Order
+            </p>
             <Combobox
               items={[
-                  "Score: Low to High",
-                  "Score: High to Low",
+                "Score: Low to High",
+                "Score: High to Low",
 
-                  "Status: A to Z",
-                  "Status: Z to A",
+                "Status: A to Z",
+                "Status: Z to A",
 
-                  "Date Added: Oldest First",
-                  "Date Added: Newest First",
+                "Date Added: Oldest First",
+                "Date Added: Newest First",
 
-                  "Last Updated: Oldest First",
-                  "Last Updated: Newest First",
+                "Last Updated: Oldest First",
+                "Last Updated: Newest First",
 
-                  "English Title (A–Z)",
-                  "English Title (Z–A)",
+                "English Title (A–Z)",
+                "English Title (Z–A)",
 
-                  "Popularity: Low to High",
-                  "Popularity: High to Low",
-                ]}
+                "Popularity: Low to High",
+                "Popularity: High to Low",
+              ]}
               onValueChange={async (e) => {
                 setListOrder(e ?? "");
                 setCurrentList(await getSortAnimeList(e ?? ""));
               }}
-              value={listOrder} 
+              value={listOrder}
             >
               <ComboboxInput
                 readOnly
@@ -129,7 +134,7 @@ export default function AnimeList({ animeList }: AnimeListProps) {
                     <ComboboxItem
                       key={item}
                       value={item}
-                       className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200"
+                      className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200"
                     >
                       {item}
                     </ComboboxItem>
@@ -140,7 +145,9 @@ export default function AnimeList({ animeList }: AnimeListProps) {
           </div>
 
           <div className="space-y-2">
-            <p className="block text-sm font-semibold text-slate-200">Status</p>
+            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+              Status
+            </p>
             <FilterForm
               filterOption={allStatus}
               filterFunction={setStatusFilter}
@@ -150,7 +157,9 @@ export default function AnimeList({ animeList }: AnimeListProps) {
           </div>
 
           <div className="space-y-2">
-            <p className="block text-sm font-semibold text-slate-200">Genres</p>
+            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+              Genres
+            </p>
             <FilterForm
               filterOption={allGenres}
               filterFunction={setGenreFilter}
@@ -160,7 +169,9 @@ export default function AnimeList({ animeList }: AnimeListProps) {
           </div>
 
           <div className="space-y-2">
-            <p className="block text-sm font-semibold text-slate-200">Tags</p>
+            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+              Tags
+            </p>
             <FilterForm
               filterOption={allTags}
               filterFunction={setTagFilter}
@@ -176,12 +187,14 @@ export default function AnimeList({ animeList }: AnimeListProps) {
         <div className="rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/40 p-8 text-center">
           <Search className="mx-auto h-12 w-12 text-slate-500" />
           <p className="mt-4 text-slate-300">No anime found for {search}</p>
-          <p className="text-sm text-slate-500">Try a different search term</p>
+          <p className="text-xs sm:text-sm text-slate-500">
+            Try a different search term
+          </p>
         </div>
       ) : filteredAnimeList.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/40 p-8 text-center">
           <p className="text-slate-300">No anime yet</p>
-          <p className="text-sm text-slate-500">
+          <p className="text-xs sm:text-sm text-slate-500">
             Add your first anime to get started
           </p>
         </div>
@@ -233,7 +246,9 @@ export default function AnimeList({ animeList }: AnimeListProps) {
                     </div>
 
                     <div className="mt-1.5 sm:mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
-                      <span className={`rounded-full px-2 py-0.5 sm:px-3 sm:py-1 font-medium bg-slate-800 ${statusClasses[anime.status] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}>
+                      <span
+                        className={`rounded-full px-2 py-0.5 sm:px-3 sm:py-1 font-medium bg-slate-800 ${statusClasses[anime.status] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
+                      >
                         {anime.status}
                       </span>
 
@@ -244,27 +259,27 @@ export default function AnimeList({ animeList }: AnimeListProps) {
                       )}
                     </div>
                     <aside className="hidden lg:block">
-                    {(genres.length > 0 || tags.length > 0) && (
-                      <div className="mt-3 flex flex-wrap items-center gap-2">
-                        {genres.map((genre: string) => (
-                          <span
-                            key={`${genre}`}
-                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${genreClasses[genre] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
-                          >
-                            {genre}
-                          </span>
-                        ))}
+                      {(genres.length > 0 || tags.length > 0) && (
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          {genres.map((genre: string) => (
+                            <span
+                              key={`${genre}`}
+                              className={`rounded-full px-2.5 py-1 text-xs font-medium ${genreClasses[genre] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
+                            >
+                              {genre}
+                            </span>
+                          ))}
 
-                        {tags.map((tag: string) => (
-                          <span
-                            key={`${tag}`}
-                            className={`rounded-full px-2.5 py-1 text-xs font-medium ${tagClasses[tag] ?? "bg-orange-500/10 text-orange-200 ring-orange-500/20"} truncate`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                          {tags.map((tag: string) => (
+                            <span
+                              key={`${tag}`}
+                              className={`rounded-full px-2.5 py-1 text-xs font-medium ${tagClasses[tag] ?? "bg-orange-500/10 text-orange-200 ring-orange-500/20"} truncate`}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </aside>
 
                     {anime.notes && (

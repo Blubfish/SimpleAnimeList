@@ -1,5 +1,6 @@
 import { Eye, Star } from "lucide-react";
 import Image from "next/image";
+import { statusClasses } from "./colorStyles";
 
 type AnimePreviewProps = {
   title: string;
@@ -27,7 +28,9 @@ export default function AnimePreview({
           <Eye className="h-3.5 w-3.5 text-orange-300" />
         </span>
         <div>
-          <p className="text-sm font-semibold text-slate-100">Live Preview</p>
+          <p className="text-xs sm:text-sm font-semibold text-slate-100">
+            Live Preview
+          </p>
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
             See how it will look
           </p>
@@ -41,7 +44,7 @@ export default function AnimePreview({
             {title || <span className="text-slate-500">Not set</span>}
           </p>
           <p>
-            <span className="font-semibold text-slate-100">score:</span>{" "}
+            <span className="font-semibold text-slate-100">Score:</span>{" "}
             <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2 py-0.5 text-xs font-semibold text-orange-300 ring-1 ring-orange-400/20">
               {score === 10 && <Star className="h-3 w-3" fill="orange" />}
               {score}/10
@@ -49,7 +52,9 @@ export default function AnimePreview({
           </p>
           <p>
             <span className="font-semibold text-slate-100">Status:</span>{" "}
-            <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700">
+            <span
+              className={`rounded-full bg-slate-800 px-2.5 py-0.5 text-xs font-medium  ${statusClasses[status] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
+            >
               {status}
             </span>
           </p>
@@ -63,7 +68,7 @@ export default function AnimePreview({
               Currently watched episode:{" "}
             </span>{" "}
             {episodes ? (
-              <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-xs font-medium text-slate-200 ring-1 ring-slate-700">
+              <span className="rounded-full px-0.5 py-0.5 text-xs font-medium text-slate-200 ">
                 {progress}/{episodes}
               </span>
             ) : (

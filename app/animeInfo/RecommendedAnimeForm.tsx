@@ -77,7 +77,7 @@ export default async function RecommendedAnimeForm({
               </p>
 
               <div className="pointer-events-none absolute left-1/2 top-0 z-10 hidden w-60 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-2xl border border-slate-700/80 bg-slate-950/95 p-3 text-xs text-slate-100 shadow-2xl shadow-black/50 ring-1 ring-black/30 backdrop-blur transition duration-200 group-hover:block">
-                <p className="text-sm font-semibold text-orange-300">
+                <p className="text-xs sm:text-sm font-semibold text-orange-300">
                   {anime.title}
                 </p>
                 <p
@@ -100,7 +100,7 @@ export default async function RecommendedAnimeForm({
         </div>
       ) : (
         <div className="rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/40 p-8 text-center">
-          <p className="text-sm font-semibold text-slate-200">
+          <p className="text-xs sm:text-sm font-semibold text-slate-200">
             No recommendations yet
           </p>
           <p className="mt-1 text-xs text-slate-400">

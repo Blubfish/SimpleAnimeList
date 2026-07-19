@@ -29,7 +29,7 @@ export default async function UserNotes({ id }: UserNotesProps) {
           </div>
         </div>
         {hasScore && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2.5 py-1 text-sm font-semibold text-orange-300 ring-1 ring-orange-400/25">
+          <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2.5 py-1 text-xs sm:text-sm font-semibold text-orange-300 ring-1 ring-orange-400/25">
             {entry.score === 10 && (
               <Star className="h-3.5 w-3.5 fill-current" />
             )}

@@ -12,21 +12,20 @@ export default async function AddAnime({
 }) {
   const { id } = await searchParams;
 
-  let metadata = null
-  let entry = null
-  
-  if (id){
+  let metadata = null;
+  let entry = null;
+
+  if (id) {
     [metadata, entry] = await Promise.all([
-    fetchAnimeMetaData(Number(id)),
-    fetchUserListEntry(Number(id)),
-  ]);
+      fetchAnimeMetaData(Number(id)),
+      fetchUserListEntry(Number(id)),
+    ]);
   }
 
+  const cookieStore = cookies();
+  const token = (await cookieStore).get("access_token")?.value;
+  if (!token) redirect("/");
 
-    const cookieStore = cookies();
-    const token = (await cookieStore).get("access_token")?.value;
-    if (!token) redirect("/");
-  
   const animeData: MyAnimeData = {
     id: entry?.id ?? 0,
     mediaId: metadata?.mediaId ?? id,
@@ -61,13 +60,13 @@ export default async function AddAnime({
         <div className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-2">
-              <p className="text-sm uppercase tracking-[0.28em] text-orange-300/80">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
                 Add anime
               </p>
               <h1 className="bg-linear-to-r from-slate-100 to-slate-300 bg-clip-text text-4xl font-bold leading-tight text-transparent">
                 Add a new anime
               </h1>
-              <p className="max-w-2xl text-sm leading-6 text-slate-400">
+              <p className="max-w-2xl text-xs sm:text-sm leading-6 text-slate-400">
                 Search for an anime, pick your favorite result, and save it to
                 your list.
               </p>

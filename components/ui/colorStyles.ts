@@ -86,4 +86,4 @@ export const statusClasses: Record<string, string> = {
   Paused: "text-stone-300 ring-stone-500/20",
   Current: "text-violet-300 ring-violet-500/20",
   Repeating: "text-yellow-300 ring-yellow-500/20",
-}
+};

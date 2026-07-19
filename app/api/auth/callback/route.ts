@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify({
       grant_type: "authorization_code",
@@ -25,7 +25,10 @@ export async function GET(req: NextRequest) {
   const tokenData = await tokenRes.json();
 
   if (!tokenRes.ok || !tokenData.access_token) {
-    return NextResponse.json({ error: "Token exchange failed" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Token exchange failed" },
+      { status: 401 },
+    );
   }
 
   const query = `{ Viewer { id } }`;
@@ -43,7 +46,10 @@ export async function GET(req: NextRequest) {
   const data = await userIdResponse.json();
 
   if (!userIdResponse.ok || !data?.data?.Viewer) {
-    return NextResponse.json({ error: "Authentication failed" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Authentication failed" },
+      { status: 401 },
+    );
   }
 
   const origin = new URL(process.env.NEXT_PUBLIC_REDIRECT_URL!).origin;
@@ -67,5 +73,5 @@ export async function GET(req: NextRequest) {
     path: "/",
   });
 
-  return response; 
+  return response;
 }

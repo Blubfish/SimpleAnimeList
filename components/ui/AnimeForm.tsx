@@ -106,7 +106,7 @@ export default function AnimeForm({
       <div className="flex flex-col gap-2">
         <label
           htmlFor="animeNameInput"
-          className="text-sm font-semibold text-slate-200"
+          className="text-xs sm:text-sm font-semibold text-slate-200"
         >
           Anime Name
         </label>
@@ -125,13 +125,13 @@ export default function AnimeForm({
               setShowOption(false);
             }, 150);
           }}
-          className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
+          className="text-xs sm:text-sm w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
         />
       </div>
 
       {showOption && animeOption.length > 0 && (
         <div className="rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 ring-1 ring-slate-800/60">
-          <p className="mb-3 text-xs uppercase tracking-[0.18em] text-slate-400">
+          <p className="mb-3 text-xs sm:text-sm uppercase tracking-[0.18em] text-slate-400">
             Suggestions
           </p>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
@@ -161,7 +161,7 @@ export default function AnimeForm({
                     unoptimized
                   />
                 </div>
-                <p className="line-clamp-2 text-xs font-medium text-slate-200 group-hover:text-orange-200">
+                <p className="line-clamp-2 text-xs sm:text-sm font-medium text-slate-200 group-hover:text-orange-200">
                   {anime.title}
                 </p>
               </button>
@@ -172,7 +172,9 @@ export default function AnimeForm({
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold text-slate-200">Score</p>
+          <p className="text-xs sm:text-sm font-semibold text-slate-200">
+            Score
+          </p>
           <Combobox
             items={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
             onValueChange={(score) =>
@@ -183,16 +185,16 @@ export default function AnimeForm({
             <ComboboxInput
               readOnly
               placeholder="Select a score"
-              className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
+              className=" text-xs sm:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
             />
-            <ComboboxContent className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-red-400 focus-within:ring-orange-400/25">
+            <ComboboxContent className="text-xs sm:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-red-400 focus-within:ring-orange-400/25">
               <ComboboxEmpty>No items found.</ComboboxEmpty>
               <ComboboxList>
                 {(item) => (
                   <ComboboxItem
                     key={item}
                     value={item}
-                    className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200"
+                    className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200 text-xs sm:text-sm"
                   >
                     {item}
                   </ComboboxItem>
@@ -203,7 +205,9 @@ export default function AnimeForm({
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold text-slate-200">Status</p>
+          <p className="text-xs sm:text-sm font-semibold text-slate-200">
+            Status
+          </p>
           <Combobox
             items={allStatus}
             onValueChange={(status) =>
@@ -223,16 +227,16 @@ export default function AnimeForm({
             <ComboboxInput
               readOnly
               placeholder="Select a status"
-              className="[&_input::placeholder]:text-slate-500 [&_input::placeholder]:opacity-100 min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
+              className="text-xs sm:text-sm [&_input::placeholder]:text-slate-500 [&_input::placeholder]:opacity-100 min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
             />
-            <ComboboxContent className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-orange-400 focus-within:ring-orange-400/25">
+            <ComboboxContent className="text-xs sm:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-orange-400 focus-within:ring-orange-400/25">
               <ComboboxEmpty>No items found.</ComboboxEmpty>
               <ComboboxList className="max-h-64">
                 {(item) => (
                   <ComboboxItem
                     key={item}
                     value={item}
-                    className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200"
+                    className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200 text-xs sm:text-sm"
                   >
                     {item}
                   </ComboboxItem>
@@ -247,7 +251,7 @@ export default function AnimeForm({
         <div className="flex flex-col gap-2">
           <label
             htmlFor="progressInput"
-            className="text-sm font-semibold text-slate-200"
+            className="text-xs sm:text-sm font-semibold text-slate-200"
           >
             Episodes Watched
           </label>
@@ -264,7 +268,7 @@ export default function AnimeForm({
                 progress: e.target.value,
               });
             }}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
+            className="text-xs sm:text-sm w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
           ></input>
         </div>
       )}
@@ -272,7 +276,7 @@ export default function AnimeForm({
       <div className="flex flex-col gap-2">
         <label
           htmlFor="shortNoteForm"
-          className="text-sm font-semibold text-slate-200"
+          className="text-xs sm:text-sm font-semibold text-slate-200"
         >
           Extra notes
         </label>
@@ -299,7 +303,7 @@ export default function AnimeForm({
       {saveError && (
         <div
           role="alert"
-          className="flex items-center gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200"
+          className="flex items-center gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs sm:text-sm text-red-200"
         >
           <TriangleAlertIcon className="h-5 w-5 shrink-0 text-red-400" />
           <span>{saveError}</span>
@@ -309,7 +313,7 @@ export default function AnimeForm({
       <button
         type="submit"
         disabled={isSaving}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50 disabled:opacity-60"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50 disabled:opacity-60"
       >
         {isSaving ? "Saving…" : "Save Anime"}
       </button>
