@@ -78,15 +78,16 @@ export default async function getAnimeList(sort: string) {
     });
 
     const data = await response.json();
-    // console.dir(data, { depth: null })
     const allAnime: MyAnimeData[] = data.data.MediaListCollection.lists.flatMap(
       (list: { entries: any[] }) =>
         list.entries.map((entry) => ({
           title: entry.media.title.english || entry.media.title.romaji || "",
           score: entry.score,
           status: entry.status
-            ? entry.status.charAt(0).toUpperCase() +
-              entry.status.slice(1).toLowerCase()
+            ? entry.status === "REPEATING"
+              ? "Rewatching"
+              : entry.status.charAt(0).toUpperCase() +
+                entry.status.slice(1).toLowerCase()
             : "",
           coverImage: entry.media.coverImage,
           genres: entry.media.genres,
