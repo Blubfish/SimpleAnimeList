@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
-      <div
+      <div 
         aria-hidden
         className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-orange-500/20 blur-3xl"
       />

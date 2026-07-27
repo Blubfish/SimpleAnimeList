@@ -59,7 +59,7 @@ export default function AnimePreview({
             </span>
           </p>
           <p>
-            <span className="font-semibold text-slate-100">notes:</span>{" "}
+            <span className="font-semibold text-slate-100">Notes:</span>{" "}
             {notes || <span className="text-slate-500">No notes yet</span>}
           </p>
 
