@@ -46,8 +46,8 @@ export default async function fetchAni(title: string) {
     return media.map((anime: any) => ({
       ...anime,
       title:
-        anime.title?.romaji ??
         anime.title?.english ??
+        anime.title?.romaji ??
         anime.title?.native ??
         "",
     }));
