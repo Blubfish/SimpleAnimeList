@@ -14,7 +14,7 @@ export default async function animeInfo({
   const resolvedParams = await params;
   const [id] = resolvedParams.slug;
 
-  const list = await getAnimeList("Score: High to Low");
+  const list = await getAnimeList();
   const saved = list.find((a: MyAnimeData) => a.id === Number(id));
   const isOnMyAniList = Boolean(saved);
   return (
