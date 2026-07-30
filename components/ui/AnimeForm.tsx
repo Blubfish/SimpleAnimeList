@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import fetchAni from "../../lib/fetchAni";
+import fetchAnimeByName from "@/lib/fetchAnimeByName";
 import Image from "next/image";
 import AnimePreview from "./AnimePreview";
 import { MyAnimeData, SaveResult } from "../../app/type";
@@ -44,6 +44,8 @@ export default function AnimeForm({
     description: "",
     averageScore: 1,
     popularity: 1,
+    updatedAt: 1,
+    createdAt: 1
   });
   const router = useRouter();
   const [animeOption, setAnimeOption] = useState<MyAnimeData[]>([]);
@@ -64,7 +66,7 @@ export default function AnimeForm({
         return;
       }
 
-      const result = await fetchAni(formData.title);
+      const result = await fetchAnimeByName(formData.title);
       setAnimeOption(result);
     }, 300);
 
@@ -176,7 +178,7 @@ export default function AnimeForm({
             Score
           </p>
           <Combobox
-            items={["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+            items={["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
             onValueChange={(score) =>
               setFormData({ ...formData, score: Number(score) })
             }

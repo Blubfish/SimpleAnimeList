@@ -1,4 +1,4 @@
-export default async function fetchAni(title: string) {
+export default async function fetchAnimeByName(title: string) {
   const query = `
       query ($search: String) {
         Page(perPage: 8) {
@@ -13,16 +13,8 @@ export default async function fetchAni(title: string) {
               extraLarge
               large
             }
-
             isAdult
-            genres
             episodes
-
-            tags {
-              name
-              rank
-            }
-
           }
         }
       }

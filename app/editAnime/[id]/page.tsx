@@ -19,7 +19,7 @@ export default async function EditAnimePage({
 
   if (!animeData) return notFound();
 
-  const savedAnimeList = await getAnimeList("Score: High to Low");
+  const savedAnimeList = await getAnimeList();
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">

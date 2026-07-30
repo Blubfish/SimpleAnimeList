@@ -30,38 +30,20 @@ query MediaListCollection($type: MediaType, $userId: Int, $sort: [MediaListSort]
         progress
         status
         notes
+        createdAt
+        updatedAt
       }
     }
   }
 }
 `;
 
-export default async function getAnimeList(sort: string) {
+export default async function getAnimeList() {
   const cookieStore = cookies();
   const token = (await cookieStore).get("access_token")?.value;
   const userId = Number((await cookieStore).get("userId")?.value);
 
   if (!token || !userId) return [];
-
-  const sortOptions: Record<string, string> = {
-    "Score: Low to High": "SCORE",
-    "Score: High to Low": "SCORE_DESC",
-
-    "Status: A to Z": "STATUS",
-    "Status: Z to A": "STATUS_DESC",
-
-    "Date Added: Oldest First": "ADDED_TIME",
-    "Date Added: Newest First": "ADDED_TIME_DESC",
-
-    "Last Updated: Oldest First": "UPDATED_TIME",
-    "Last Updated: Newest First": "UPDATED_TIME_DESC",
-
-    "English Title (A–Z)": "MEDIA_TITLE_ENGLISH",
-    "English Title (Z–A)": "MEDIA_TITLE_ENGLISH_DESC",
-
-    "Popularity: Low to High": "MEDIA_POPULARITY",
-    "Popularity: High to Low": "MEDIA_POPULARITY_DESC",
-  };
 
   try {
     const response = await fetch("https://graphql.anilist.co", {
@@ -73,7 +55,7 @@ export default async function getAnimeList(sort: string) {
       },
       body: JSON.stringify({
         query,
-        variables: { userId, type: "ANIME", sort: sortOptions[sort] },
+        variables: { userId, type: "ANIME"},
       }),
     });
 
@@ -99,9 +81,12 @@ export default async function getAnimeList(sort: string) {
             .map((tag: { name: string }) => tag.name),
           progress: entry.progress,
           notes: entry.notes,
+          popularity: entry.media.popularity,
+          updatedAt: entry.updatedAt,
+          createdAt: entry.createdAt,
         })),
     );
-    return allAnime ?? [];
+    return allAnime.toSorted((a, b) => b.score - a.score) ?? [];
   } catch (error) {
     console.log(error);
     return [];

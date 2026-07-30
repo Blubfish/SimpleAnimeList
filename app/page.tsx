@@ -8,12 +8,12 @@ import { cookies } from "next/headers";
 export default async function Home() {
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token")?.value;
-  const myAnimeList = token ? await getAnimeList("Score: High to Low") : [];
+  const myAnimeList = token ? await getAnimeList() : [];
   const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URL}&response_type=code`;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
-      <div 
+      <div
         aria-hidden
         className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-orange-500/20 blur-3xl"
       />

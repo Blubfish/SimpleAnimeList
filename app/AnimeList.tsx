@@ -42,6 +42,8 @@ export default function AnimeList({ animeList }: AnimeListProps) {
         anime.genres.some((genre: string) => genreFilter.includes(genre))),
   );
 
+
+
   return (
     <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -118,7 +120,7 @@ export default function AnimeList({ animeList }: AnimeListProps) {
               ]}
               onValueChange={async (e) => {
                 setListOrder(e ?? "");
-                setCurrentList(await getSortAnimeList(e ?? ""));
+                setCurrentList(await getSortAnimeList(e ?? "Score: High to Low", animeList));
               }}
               value={listOrder}
             >

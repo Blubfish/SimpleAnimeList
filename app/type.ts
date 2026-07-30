@@ -24,4 +24,6 @@ export type MyAnimeData = AnimeListCore & {
   description: string;
   popularity: number;
   averageScore: number;
+  createdAt: number;
+  updatedAt: number;
 };

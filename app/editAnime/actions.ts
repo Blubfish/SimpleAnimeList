@@ -89,6 +89,8 @@ export async function handleGet(mediaId: number) {
           description: entry.media.description,
           popularity: entry.media.popularity,
           averageScore: entry.media.averageScore,
+          updatedAt: 1,
+          createdAt: 1
         }
       : null;
 

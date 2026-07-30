@@ -7,11 +7,12 @@ type UserNotesProps = {
 
 export default async function UserNotes({ id }: UserNotesProps) {
   const entry = await fetchUserListEntry(id);
+  console.log(entry, "thoughts?");
 
   if (!entry) return null;
 
   const hasNotes = Boolean(entry?.notes?.trim());
-  const hasScore = Boolean(entry?.score);
+  const hasScore = Boolean(entry?.score || entry.score == 0);
 
   if (!hasNotes && !hasScore) return null;
 

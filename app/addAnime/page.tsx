@@ -42,8 +42,10 @@ export default async function AddAnime({
     description: metadata?.description ?? "",
     popularity: metadata?.popularity ?? 0,
     averageScore: metadata?.averageScore ?? 0,
+    createdAt: 1,
+    updatedAt: 1,
   };
-  const savedAnimeList = await getAnimeList("Score: High to Low");
+  const savedAnimeList = await getAnimeList();
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
