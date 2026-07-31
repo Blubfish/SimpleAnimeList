@@ -39,9 +39,9 @@ query MediaListCollection($type: MediaType, $userId: Int, $sort: [MediaListSort]
 `;
 
 export default async function getAnimeList() {
-  const cookieStore = cookies();
-  const token = (await cookieStore).get("access_token")?.value;
-  const userId = Number((await cookieStore).get("userId")?.value);
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token")?.value;
+  const userId = Number(cookieStore.get("userId")?.value);
 
   if (!token || !userId) return [];
 
@@ -58,6 +58,10 @@ export default async function getAnimeList() {
         variables: { userId, type: "ANIME"},
       }),
     });
+    if (!response.ok) {
+      console.error("Anilist API error:", response.status);
+      return [];
+    }
 
     const data = await response.json();
     const allAnime: MyAnimeData[] = data.data.MediaListCollection.lists.flatMap(
@@ -75,7 +79,7 @@ export default async function getAnimeList() {
           genres: entry.media.genres,
           id: entry.media.id,
           episodes: entry.media.episodes,
-          tags: entry.media.tags
+          tags: (entry.media.tags ?? [])
             .filter((tag: { rank: number }) => tag.rank >= 90)
             .slice(0, 3)
             .map((tag: { name: string }) => tag.name),
@@ -86,9 +90,9 @@ export default async function getAnimeList() {
           createdAt: entry.createdAt,
         })),
     );
-    return allAnime.toSorted((a, b) => b.score - a.score) ?? [];
+    return allAnime.sort((a, b) => (b.score ?? 0) - (a.score ?? 0)) ?? [];
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return [];
   }
 }

@@ -151,7 +151,7 @@ export async function handleDelete(id: number): Promise<SaveResult> {
     revalidatePath("/");
     return { success: true };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return { success: false, message: "Couldn't reach AniList." };
   }
 }

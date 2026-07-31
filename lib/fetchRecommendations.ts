@@ -65,13 +65,14 @@ export default async function fetchRecommendations(id: number) {
       .map((n: animeRecommendation) => n.mediaRecommendation)
       .filter(Boolean);
 
-    const flattened = list.map((anime: any) => ({
+    const flattened = list.map((anime: { title: { english: string; romanji: string; }; }) => ({
       ...anime,
       title: anime.title.english || anime.title.romanji || "",
     }));
 
     return flattened;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return [];
   }
 }

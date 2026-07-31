@@ -7,7 +7,6 @@ type UserNotesProps = {
 
 export default async function UserNotes({ id }: UserNotesProps) {
   const entry = await fetchUserListEntry(id);
-  console.log(entry, "thoughts?");
 
   if (!entry) return null;
 

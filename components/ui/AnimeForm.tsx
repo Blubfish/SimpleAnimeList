@@ -96,7 +96,7 @@ export default function AnimeForm({
       router.push("/");
       router.refresh();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setSaveError("Couldn't save your anime. Try again.");
     } finally {
       setIsSaving(false);
