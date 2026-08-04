@@ -4,6 +4,7 @@ import ViewPageForm from "../ViewPageForm";
 import CopyUrlButton from "@/components/ui/CopyURLButton";
 import { Home, LogInIcon } from "lucide-react";
 import Link from "next/link";
+import StatPanel from "@/app/StatPanel";
 
 export default async function ViewPage({
   params,
@@ -66,6 +67,7 @@ export default async function ViewPage({
             </div>
           </div>
         </div>
+        <StatPanel myAnimeList={viewAnimeList} />
         <ViewPageForm viewAnimeList={viewAnimeList} />
       </div>
     </main>
