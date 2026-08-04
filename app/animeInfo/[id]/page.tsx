@@ -4,7 +4,7 @@ import getAnimeList from "@/lib/getMyAnimeList";
 import RecommendedAnimeForm from "../RecommendedAnimeForm";
 import AnimeInfo from "../AnimeInfo";
 import { MyAnimeData } from "@/app/type";
-import { Home, Pencil, Plus } from "lucide-react";
+import { Home, Pencil, Plus, List } from "lucide-react";
 import { cookies } from "next/headers";
 
 export default async function animeInfo({
@@ -16,11 +16,15 @@ export default async function animeInfo({
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
+  const userId = cookieStore.get("userId")?.value;
   const isLoggedIn = Boolean(accessToken);
 
   const list = isLoggedIn ? await getAnimeList() : [];
   const saved = list.find((a: MyAnimeData) => a.id === Number(id));
   const isOnMyAniList = Boolean(saved);
+
+  const ctaButtonClass =
+    "inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
@@ -65,41 +69,41 @@ export default async function animeInfo({
             <div className="flex flex-wrap items-center gap-3">
               <BackButton />
 
-              {isLoggedIn &&
-                (isOnMyAniList ? (
+              {isLoggedIn ? (
+                isOnMyAniList ? (
                   <>
-                    <Link
-                      href="/"
-                      className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
-                    >
+                    <Link href="/" className={ctaButtonClass}>
                       <Home className="h-4 w-4" />
                       Back to Home
-                    </Link>{" "}
-                    <Link
-                      href={`/editAnime/${id}`}
-                      className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
-                    >
-                      {" "}
-                      <Pencil className="h-4 w-4" /> Edit Anime{" "}
-                    </Link>{" "}
+                    </Link>
+                    <Link href={`/editAnime/${id}`} className={ctaButtonClass}>
+                      <Pencil className="h-4 w-4" /> Edit Anime
+                    </Link>
                   </>
                 ) : (
                   <Link
                     href={{ pathname: "/addAnime", query: { id } }}
-                    className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
+                    className={ctaButtonClass}
                   >
-                    {" "}
-                    <Plus className="h-4 w-4" /> Add Anime{" "}
+                    <Plus className="h-4 w-4" /> Add Anime
                   </Link>
-                ))}
+                )
+              ) : (
+                <Link href={`/viewPage/${userId}`} className={ctaButtonClass}>
+                  <List className="h-4 w-4" />
+                  Back to List
+                </Link>
+              )}
             </div>
           </div>
         </div>
 
         <AnimeInfo id={Number(id)} />
 
-        {isLoggedIn && isOnMyAniList && (
+        {isLoggedIn && isOnMyAniList ? (
           <RecommendedAnimeForm mediaId={Number(id)} savedAnimeList={list} />
+        ) : (
+          <RecommendedAnimeForm mediaId={Number(id)} />
         )}
       </div>
     </main>

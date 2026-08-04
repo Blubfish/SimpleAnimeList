@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { getViewAnimeList } from "../actions";
 import ViewPageForm from "../ViewPageForm";
 import CopyUrlButton from "@/components/ui/CopyURLButton";
-import { Home } from "lucide-react";
+import { Home, LogInIcon } from "lucide-react";
 import Link from "next/link";
 
 export default async function ViewPage({
@@ -37,18 +37,32 @@ export default async function ViewPage({
               <h1 className="bg-linear-to-r from-slate-100 to-slate-300 bg-clip-text text-4xl font-bold leading-tight text-transparent">
                 Anime List
               </h1>
+              <p className="max-w-2xl text-xs sm:text-sm leading-6 text-slate-400">
+                Viewing other people list. Log in with anilist to start your
+                list today.
+              </p>
             </div>
             <div className="flex gap-2">
-              {token && (
+              {token ? (
+                <>
+                  <Link
+                    href="/"
+                    className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
+                  >
+                    <Home className="h-4 w-4" />
+                    Back to Home
+                  </Link>
+                  <CopyUrlButton />
+                </>
+              ) : (
                 <Link
                   href="/"
                   className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
                 >
-                  <Home className="h-4 w-4" />
-                  Back to Home
+                  <LogInIcon className="h-4 w-4" />
+                  Log in
                 </Link>
               )}
-              <CopyUrlButton />
             </div>
           </div>
         </div>

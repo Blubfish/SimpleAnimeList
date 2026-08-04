@@ -70,9 +70,10 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
             <p
               className="max-w-3xl text-base leading-8 text-slate-300/90 sm:text-lg"
               dangerouslySetInnerHTML={{
-                __html: (sanitizeDescription(metadata.description) || "No description")
+                __html:
+                  sanitizeDescription(metadata.description) || "No description",
               }}
-            />    
+            />
           </div>
 
           <Suspense fallback={null}>

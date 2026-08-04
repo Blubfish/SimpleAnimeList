@@ -84,7 +84,9 @@ export default async function RecommendedAnimeForm({
                 <p
                   className="line-clamp-5 leading-5 text-slate-300"
                   dangerouslySetInnerHTML={{
-                    __html: (sanitizeDescription(anime.description) || "No description")
+                    __html:
+                      sanitizeDescription(anime.description) ||
+                      "No description",
                   }}
                 />
 
