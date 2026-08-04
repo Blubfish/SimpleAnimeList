@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 
-export default function middleware (request: NextRequest) {
+export default function proxy(request: NextRequest) {
     const match = request.nextUrl.pathname.match(/^\/viewPage\/(\d+)/);
 
     if (match){

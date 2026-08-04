@@ -1,13 +1,12 @@
-import DOMPurify, { WindowLike } from "dompurify";
-import { JSDOM } from "jsdom";
+// lib/sanitize.ts
+import sanitizeHtml from "sanitize-html";
 
-const window = new JSDOM("").window;
-const purify = DOMPurify( window as unknown as WindowLike);
-
-export function sanitizeDescription(html: string): string{
-    const normalize = html.replace(/(<br\s*\/?>)+/gi, "").replace(/\(Source:.*?\)/gi, "").trim()
-    return purify.sanitize( normalize, {
-            ALLOWED_TAGS: ["br", "b", "i", "em", "strong", "a", "p"],
-            ALLOWED_ATTR: ["href"],
-    })
-};
+export function sanitizeDescription(html: string): string {
+  const normalized = html.replace(/(<br\s*\/?>)+/gi, "").replace(/\(Source:.*?\)/gi, "").trim()
+  return sanitizeHtml(normalized, {
+    allowedTags: ["br", "b", "i", "em", "strong", "a", "p"],
+    allowedAttributes: {
+      a: ["href"],
+    },
+  });
+}
