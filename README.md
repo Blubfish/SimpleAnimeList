@@ -16,6 +16,7 @@ I want to learn Next.js and build a simple anime tracker list (replacing my Goog
 - View anime details and community ratings/review
 - Add, edit, and delete anime
 - Search and filter based on anime name, title, genres, etc.
+- Share list with others (Don't require an Anilist account)
 - Sync with AniList
 
 ## Tech Stack
