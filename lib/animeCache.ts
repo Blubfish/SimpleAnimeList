@@ -1,4 +1,4 @@
-import { pool } from "./connectDB";
+import pool from "./connectDB";
 
 export async function checkCache(mediaId: number) {
   if (!mediaId) return null;
@@ -10,7 +10,8 @@ export async function checkCache(mediaId: number) {
   const row = result.rows[0];
 
   if (row) {
-    const isFresh = Date.now() - row.updated_at.getTime() < 24 * 60 * 60 * 1000;
+    const isFresh =
+      Date.now() - row.updated_at.getTime() < 7 * 24 * 60 * 60 * 1000;
     switch (isFresh) {
       case true:
         return result.rows[0];

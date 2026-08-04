@@ -59,16 +59,32 @@ export default async function fetchRecommendations(id: number) {
 
     const data = await response.json();
 
+    if (data.errors) {
+      console.error("AniList GraphQL error:", data.errors);
+      return [];
+    }
+
+    if (!data?.data?.Media) {
+      console.error("Unexpected AniList response shape:", data);
+      return [];
+    }
+
     const entry = data?.data?.Media?.recommendations?.nodes;
+
+    if (!entry) {
+      return [];
+    }
 
     const list = entry
       .map((n: animeRecommendation) => n.mediaRecommendation)
       .filter(Boolean);
 
-    const flattened = list.map((anime: { title: { english: string; romanji: string; }; }) => ({
-      ...anime,
-      title: anime.title.english || anime.title.romanji || "",
-    }));
+    const flattened = list.map(
+      (anime: { title: { english: string; romaji: string } }) => ({
+        ...anime,
+        title: anime.title.english || anime.title.romaji || "",
+      }),
+    );
 
     return flattened;
   } catch (error) {

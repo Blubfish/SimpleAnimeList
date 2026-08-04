@@ -5,6 +5,7 @@ import { genreClasses, tagClasses } from "@/components/ui/colorStyles";
 import { Suspense } from "react";
 import UserNotes from "./UserNotes";
 import { Star, Users } from "lucide-react";
+import { sanitizeDescription } from "@/lib/sanitize";
 
 type AnimeInfoProps = {
   id: number;
@@ -69,12 +70,9 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
             <p
               className="max-w-3xl text-base leading-8 text-slate-300/90 sm:text-lg"
               dangerouslySetInnerHTML={{
-                __html: (metadata.description || "No description")
-                  .replace(/(<br\s*\/?>)+/gi, "")
-                  .replace(/\(Source:.*?\)/gi, "")
-                  .trim(),
+                __html: (sanitizeDescription(metadata.description) || "No description")
               }}
-            />
+            />    
           </div>
 
           <Suspense fallback={null}>

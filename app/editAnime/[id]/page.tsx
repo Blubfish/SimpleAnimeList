@@ -16,9 +16,7 @@ export default async function EditAnimePage({
   if (!token) redirect("/");
 
   const animeData = await handleGet(Number(id));
-
   if (!animeData) return notFound();
-
   const savedAnimeList = await getAnimeList();
 
   return (

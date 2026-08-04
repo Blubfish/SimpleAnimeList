@@ -67,37 +67,37 @@ export async function handleGet(mediaId: number) {
 
     const data = await response.json();
 
-    const entry = data.data.MediaList;
-
-    const flattened = entry
-      ? {
-          id: entry.id,
-          mediaId: entry.mediaId,
-          status: reverseStatusMap[entry.status],
-          score: entry.score,
-          progress: entry.progress,
-          notes: entry.notes,
-          title: entry.media.title.english || entry.media.title.romaji || "",
-          coverImage: entry.media.coverImage,
-          episodes: entry.media.episodes,
-          genres: entry.media.genres,
-          tags: entry.media.tags
-            .filter((tag: { rank: number }) => tag.rank >= 90)
-            .slice(0, 3)
-            .map((tag: { name: string }) => tag.name),
-          isAdult: entry.media.isAdult,
-          description: entry.media.description,
-          popularity: entry.media.popularity,
-          averageScore: entry.media.averageScore,
-          updatedAt: 1,
-          createdAt: 1
-        }
-      : null;
-
     if (!response.ok || data.errors) {
       console.error("AniList Error details:", data.errors || data);
       return null;
     } else {
+      const entry = data.data.MediaList;
+
+      const flattened = entry
+        ? {
+            id: entry.id,
+            mediaId: entry.mediaId,
+            status: reverseStatusMap[entry.status],
+            score: entry.score,
+            progress: entry.progress,
+            notes: entry.notes,
+            title: entry.media.title.english || entry.media.title.romaji || "",
+            coverImage: entry.media.coverImage,
+            episodes: entry.media.episodes,
+            genres: entry.media.genres,
+            tags: entry.media.tags
+              .filter((tag: { rank: number }) => tag.rank >= 90)
+              .slice(0, 3)
+              .map((tag: { name: string }) => tag.name),
+            isAdult: entry.media.isAdult,
+            description: entry.media.description,
+            popularity: entry.media.popularity,
+            averageScore: entry.media.averageScore,
+            updatedAt: 1,
+            createdAt: 1,
+          }
+        : null;
+
       console.log("Successfully Retreive:", flattened);
       return flattened;
     }
@@ -165,8 +165,8 @@ export async function handleUpdate(formData: MyAnimeData): Promise<SaveResult> {
     return { success: false, message: "Your session expired. Log in again." };
   }
   const query = `
-      mutation ($mediaId: Int, $status: MediaListStatus, $saveMediaListEntryId: Int, $score: Float, $notes: String, $progress: Int) {
-        SaveMediaListEntry(mediaId: $mediaId, status: $status, id: $saveMediaListEntryId, score: $score, notes: $notes, progress: $progress) {
+      mutation ($mediaId: Int, $status: MediaListStatus, $score: Float, $notes: String, $progress: Int) {
+        SaveMediaListEntry(mediaId: $mediaId, status: $status, score: $score, notes: $notes, progress: $progress) {
           id
         }
       }

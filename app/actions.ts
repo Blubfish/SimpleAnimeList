@@ -24,9 +24,9 @@ export default async function getSortAnimeList(
     case "Last Updated: Newest First":
       return animeList.toSorted((a, b) => b.updatedAt - a.updatedAt);
     case "English Title (A–Z)":
-      return animeList.toSorted((a, b) => a.status.localeCompare(b.status));
+      return animeList.toSorted((a, b) => a.title.localeCompare(b.title));
     case "English Title (Z–A)":
-      return animeList.toSorted((a, b) => b.status.localeCompare(a.status));
+      return animeList.toSorted((a, b) => b.title.localeCompare(a.title));
     case "Popularity: Low to High":
       return animeList.toSorted((a, b) => a.popularity - b.popularity);
     case "Popularity: High to Low":

@@ -2,8 +2,8 @@ import { cookies } from "next/headers";
 import { MyAnimeData } from "@/app/type";
 
 const query = `
-query MediaListCollection($type: MediaType, $userId: Int, $sort: [MediaListSort]) {
-  MediaListCollection(type: $type, userId: $userId, sort: $sort) {
+query MediaListCollection($type: MediaType, $userId: Int) {
+  MediaListCollection(type: $type, userId: $userId) {
     lists {
       entries {
         media {
@@ -55,7 +55,7 @@ export default async function getAnimeList() {
       },
       body: JSON.stringify({
         query,
-        variables: { userId, type: "ANIME"},
+        variables: { userId, type: "ANIME" },
       }),
     });
     if (!response.ok) {
@@ -64,6 +64,17 @@ export default async function getAnimeList() {
     }
 
     const data = await response.json();
+
+    if (data.errors) {
+      console.error("AniList GraphQL error:", data.errors);
+      return [];
+    }
+
+    if (!data.data?.MediaListCollection) {
+      console.error("Unexpected AniList response shape:", data);
+      return [];
+    }
+
     const allAnime: MyAnimeData[] = data.data.MediaListCollection.lists.flatMap(
       (list: { entries: any[] }) =>
         list.entries.map((entry) => ({

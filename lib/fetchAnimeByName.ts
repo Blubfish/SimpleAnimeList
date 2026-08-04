@@ -35,15 +35,20 @@ export default async function fetchAnimeByName(title: string) {
     const data = await response.json();
 
     const media = data?.data?.Page.media ?? [];
-    return media.map((anime: { title: { english: string; romaji: string; native: string; }; }) => ({
-      ...anime,
-      title:
-        anime.title?.english ??
-        anime.title?.romaji ??
-        anime.title?.native ??
-        "",
-    }));
+    return media.map(
+      (anime: {
+        title: { english: string; romaji: string; native: string };
+      }) => ({
+        ...anime,
+        title:
+          anime.title?.english ??
+          anime.title?.romaji ??
+          anime.title?.native ??
+          "",
+      }),
+    );
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return [];
   }
 }

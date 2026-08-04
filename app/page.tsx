@@ -2,12 +2,13 @@ import Link from "next/link";
 import AnimeList from "./AnimeList";
 import StatPanel from "./StatPanel";
 import getAnimeList from "@/lib/getMyAnimeList";
-import { LogInIcon, LogOutIcon } from "lucide-react";
+import { LogInIcon, LogOutIcon, Share } from "lucide-react";
 import { cookies } from "next/headers";
 
 export default async function Home() {
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token")?.value;
+  const userId = cookieStore.get("userId")?.value;
   const myAnimeList = token ? await getAnimeList() : [];
   const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URL}&response_type=code`;
 
@@ -39,6 +40,13 @@ export default async function Home() {
                 </p>
               </div>
               <div className="flex gap-2">
+                <Link
+                  href={`/viewPage/${userId}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
+                >
+                  <Share color="black" />
+                  Share List
+                </Link>
                 <Link
                   href="/logout"
                   className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"

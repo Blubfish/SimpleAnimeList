@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { MyAnimeData } from "../type";
 import { Star } from "lucide-react";
+import { sanitizeDescription } from "@/lib/sanitize";
 
 type RecommendedAnimeFormProps = {
   mediaId: number;
@@ -83,10 +84,7 @@ export default async function RecommendedAnimeForm({
                 <p
                   className="line-clamp-5 leading-5 text-slate-300"
                   dangerouslySetInnerHTML={{
-                    __html: (anime.description || "No description")
-                      .replace(/(<br\s*\/?>)+/gi, " ")
-                      .replace(/\(Source:.*?\)/gi, "")
-                      .trim(),
+                    __html: (sanitizeDescription(anime.description) || "No description")
                   }}
                 />
 

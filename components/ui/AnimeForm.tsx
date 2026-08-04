@@ -45,7 +45,7 @@ export default function AnimeForm({
     averageScore: 1,
     popularity: 1,
     updatedAt: 1,
-    createdAt: 1
+    createdAt: 1,
   });
   const router = useRouter();
   const [animeOption, setAnimeOption] = useState<MyAnimeData[]>([]);
@@ -178,7 +178,7 @@ export default function AnimeForm({
             Score
           </p>
           <Combobox
-            items={["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]}
+            items={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
             onValueChange={(score) =>
               setFormData({ ...formData, score: Number(score) })
             }
