@@ -46,6 +46,7 @@ export default function AnimeForm({
     popularity: 1,
     updatedAt: 1,
     createdAt: 1,
+    bannerImage: animeData?.bannerImage ?? "",
   });
   const router = useRouter();
   const [animeOption, setAnimeOption] = useState<MyAnimeData[]>([]);
