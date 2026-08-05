@@ -28,13 +28,14 @@ export async function fetchAnimeMetaData(mediaId: number) {
         description
         popularity
         averageScore
+        bannerImage
       }
     }
   `;
 
   try {
     const mediaRes =
-      cacheData === null
+      cacheData === null || cacheData.cover_image != null
         ? await fetch("https://graphql.anilist.co", {
             method: "POST",
             headers: {
@@ -79,6 +80,7 @@ export async function fetchAnimeMetaData(mediaId: number) {
       description: cacheData?.description ?? media?.description ?? "",
       popularity: cacheData?.popularity ?? media?.popularity ?? 0,
       averageScore: cacheData?.average_score ?? media?.averageScore ?? 0,
+      bannerImage: cacheData?.banner_image ?? media?.bannerImage ?? " ",
     };
 
     if (!cacheData) {

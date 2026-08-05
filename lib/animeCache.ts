@@ -37,6 +37,7 @@ export async function updateCache(mediaData: {
   description: string | null;
   popularity: number;
   averageScore: number;
+  bannerImage: string;
 }) {
   await pool.query(
     `INSERT INTO anime_cache (
@@ -50,8 +51,9 @@ export async function updateCache(mediaData: {
       description,
       popularity,
       average_score,
+      banner_image,
       updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
     ON CONFLICT (anilist_id) DO UPDATE SET
       title = EXCLUDED.title,
       cover_image = EXCLUDED.cover_image,
@@ -62,6 +64,7 @@ export async function updateCache(mediaData: {
       description = EXCLUDED.description,
       popularity = EXCLUDED.popularity,
       average_score = EXCLUDED.average_score,
+      banner_image = EXCLUDED.banner_image,
       updated_at = now()`,
     [
       mediaData.mediaId,
@@ -74,6 +77,7 @@ export async function updateCache(mediaData: {
       mediaData.description,
       mediaData.popularity,
       mediaData.averageScore,
+      mediaData.bannerImage,
     ],
   );
 }

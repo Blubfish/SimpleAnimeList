@@ -25,6 +25,7 @@ query MediaListCollection($type: MediaType, $userId: Int) {
             rank
             name
           }
+          bannerImage
         }
         score
         progress
@@ -99,6 +100,7 @@ export default async function getAnimeList() {
           popularity: entry.media.popularity,
           updatedAt: entry.updatedAt,
           createdAt: entry.createdAt,
+          bannerImage: entry.media.bannerImage,
         })),
     );
     return allAnime.sort((a, b) => (b.score ?? 0) - (a.score ?? 0)) ?? [];

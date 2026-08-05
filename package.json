@@ -27,8 +27,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/dompurify": "^3.0.5",
-    "@types/jsdom": "^28.0.3",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
     "@types/react": "^19",

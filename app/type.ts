@@ -26,4 +26,5 @@ export type MyAnimeData = AnimeListCore & {
   averageScore: number;
   createdAt: number;
   updatedAt: number;
+  bannerImage: string;
 };

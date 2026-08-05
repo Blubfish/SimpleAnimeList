@@ -44,6 +44,7 @@ export default async function AddAnime({
     averageScore: metadata?.averageScore ?? 0,
     createdAt: 1,
     updatedAt: 1,
+    bannerImage: metadata?.bannerImage ?? "",
   };
   const savedAnimeList = await getAnimeList();
 

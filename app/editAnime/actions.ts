@@ -36,6 +36,7 @@ export async function handleGet(mediaId: number) {
           description
           popularity
           averageScore
+          bannerImage
         }
       }
     }
@@ -95,6 +96,7 @@ export async function handleGet(mediaId: number) {
             averageScore: entry.media.averageScore,
             updatedAt: 1,
             createdAt: 1,
+            bannerImage: entry.media.bannerImage,
           }
         : null;
 

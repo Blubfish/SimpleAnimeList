@@ -15,6 +15,10 @@ export default async function UserNotes({ id }: UserNotesProps) {
 
   if (!hasNotes && !hasScore) return null;
 
+  if (entry?.score > 10) {
+    entry.score = entry.score / 10;
+  }
+
   return (
     <div className="rounded-2xl border border-orange-400/20 bg-linear-to-br from-orange-500/10 via-slate-800/60 to-slate-800/60 p-5 ring-1 ring-orange-400/20 shadow-lg shadow-orange-500/10">
       <div className="mb-3 flex items-center justify-between gap-3">

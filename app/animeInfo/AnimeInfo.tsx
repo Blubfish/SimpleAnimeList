@@ -13,6 +13,7 @@ type AnimeInfoProps = {
 
 export default async function AnimeInfo({ id }: AnimeInfoProps) {
   const metadata = await fetchAnimeMetaData(Number(id));
+  console.log(metadata, "metadata");
 
   if (!metadata) {
     return (
@@ -37,7 +38,19 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
 
   return (
     <article className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/90 via-slate-900/70 to-slate-950/90 p-4 sm:p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+      {/* Blurred background */}
+
+      <div
+        className="absolute inset-0 bg-cover bg-center blur-none"
+        style={{
+          backgroundImage: `url(${metadata.bannerImage})`,
+        }}
+      />
+
+      {/* Dark overlay */}
+
+      <div className="absolute inset-0 bg-slate-950/85" />
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start relative z-10">
         <div className="relative shrink-0 mx-auto w-64 lg:mx-0 lg:w-70">
           <div
             aria-hidden

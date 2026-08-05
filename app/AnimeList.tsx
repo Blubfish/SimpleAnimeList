@@ -212,10 +212,22 @@ export default function AnimeList({ animeList }: AnimeListProps) {
             return (
               <Link
                 key={anime.id}
-                className="group block w-full rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
+                className="relative overflow-hidden group block w-full rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
                 href={`/animeInfo/${anime.id}`}
               >
-                <div className="flex gap-3 sm:gap-4">
+                {/* Blurred background */}
+
+                <div
+                  className="absolute inset-0 scale-125 bg-cover bg-center blur-none"
+                  style={{
+                    backgroundImage: `url(${anime.bannerImage})`,
+                  }}
+                />
+
+                {/* Dark overlay */}
+
+                <div className="absolute inset-0 bg-slate-950/80" />
+                <div className="flex gap-3 sm:gap-4 relative z-10">
                   <div className="h-[100px] w-[70px] sm:h-42.5 sm:w-30 shrink-0 overflow-hidden rounded-xl bg-slate-800 ring-1 ring-slate-700/80">
                     {anime.coverImage.large ? (
                       <Image
