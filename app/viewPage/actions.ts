@@ -27,6 +27,7 @@ export async function getViewAnimeList(userId: number) {
                 rank
                 name
               }
+              bannerImage
             }
             score
             progress
@@ -84,6 +85,7 @@ export async function getViewAnimeList(userId: number) {
           popularity: entry.media.popularity,
           updatedAt: entry.updatedAt,
           createdAt: entry.createdAt,
+          bannerImage: entry.media.bannerImage
         })),
     );
     return allAnime.sort((a, b) => (b.score ?? 0) - (a.score ?? 0)) ?? [];

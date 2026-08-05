@@ -49,7 +49,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
 
       {/* Dark overlay */}
 
-      <div className="absolute inset-0 bg-slate-950/85" />
+      <div className="absolute inset-0 bg-slate-950/90" />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start relative z-10">
         <div className="relative shrink-0 mx-auto w-64 lg:mx-0 lg:w-70">
           <div
