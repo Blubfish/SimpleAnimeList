@@ -203,9 +203,9 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
 
             return (
               <Link
-                key={anime.id}
+                key={anime.mediaId}
                 className="relative overflow-hidden group block w-full rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
-                href={`/animeInfo/${anime.id}`}
+                href={`/animeInfo/${anime.mediaId}`}
               >
                 {/* Blurred background */}
 

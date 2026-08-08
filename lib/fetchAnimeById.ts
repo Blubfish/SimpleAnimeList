@@ -91,7 +91,6 @@ export async function fetchAnimeMetaData(mediaId: number) {
       }
     }
 
-    console.log("Successfully Retrieve:", flattened);
     return flattened;
   } catch (error) {
     console.error("Request failed:", error);
@@ -156,14 +155,13 @@ export async function fetchUserListEntry(mediaId: number) {
     }
 
     const flattened = {
-      id: entry?.id ?? null,
+      entryId: entry?.id ?? null,
       status: entry ? reverseStatusMap[entry.status] : "",
       score: entry ? entry.score : 0,
       progress: entry ? entry.progress : 0,
       notes: entry ? entry.notes : null,
     };
 
-    console.log("Successfully Retrieve:", flattened);
     return flattened;
   } catch (error) {
     console.error("Request failed:", error);

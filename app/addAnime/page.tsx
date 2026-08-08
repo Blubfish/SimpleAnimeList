@@ -8,17 +8,17 @@ import { redirect } from "next/navigation";
 export default async function AddAnime({
   searchParams,
 }: {
-  searchParams: Promise<{ id: string }>;
+  searchParams: Promise<{ mediaId: string }>;
 }) {
-  const { id } = await searchParams;
+  const { mediaId } = await searchParams;
 
   let metadata = null;
   let entry = null;
 
-  if (id) {
+  if (mediaId) {
     [metadata, entry] = await Promise.all([
-      fetchAnimeMetaData(Number(id)),
-      fetchUserListEntry(Number(id)),
+      fetchAnimeMetaData(Number(mediaId)),
+      fetchUserListEntry(Number(mediaId)),
     ]);
   }
 
@@ -27,8 +27,8 @@ export default async function AddAnime({
   if (!token) redirect("/");
 
   const animeData: MyAnimeData = {
-    id: entry?.id ?? 0,
-    mediaId: metadata?.mediaId ?? id,
+    entryId: entry?.entryId ?? 0,
+    mediaId: metadata?.mediaId ?? mediaId,
     status: entry?.status ?? "",
     score: entry?.score ?? 0,
     progress: entry?.progress ?? 0,

@@ -7,15 +7,17 @@ import { cookies } from "next/headers";
 export default async function EditAnimePage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ mediaId: string }>;
 }) {
-  const { id } = await params;
+  const { mediaId } = await params;
 
   const cookieStore = cookies();
   const token = (await cookieStore).get("access_token")?.value;
+
   if (!token) redirect("/");
 
-  const animeData = await handleGet(Number(id));
+  const animeData = await handleGet(Number(mediaId));
+
   if (!animeData) return notFound();
   const savedAnimeList = await getAnimeList();
 

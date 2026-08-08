@@ -1,5 +1,5 @@
 type AnimeListCore = {
-  id: number; // list-entry id
+  entryId: number; // list-entry id
   mediaId: number; // media id
   status: string;
   score: number;
@@ -7,7 +7,7 @@ type AnimeListCore = {
   notes: string | null;
 };
 
-export type SaveAnimeData = Omit<AnimeListCore, "id">;
+export type SaveAnimeData = Omit<AnimeListCore, "entryId">;
 
 export type SaveResult = {
   success: boolean;

@@ -4,10 +4,10 @@ export default function proxy(request: NextRequest) {
   const match = request.nextUrl.pathname.match(/^\/viewPage\/(\d+)/);
 
   if (match) {
-    const userId = match[1];
+    const viewedUserId = match[1];
     const response = NextResponse.next();
 
-    response.cookies.set("userId", userId, {
+    response.cookies.set("viewedUserId", viewedUserId, {
       httpOnly: true,
       secure: true,
       sameSite: "lax",
@@ -23,5 +23,5 @@ export default function proxy(request: NextRequest) {
 
 //If not match just skip
 export const config = {
-  matcher: "/viewPage/:userId*",
+  matcher: "/viewPage/:viewedUserId*",
 };

@@ -10,17 +10,18 @@ import { cookies } from "next/headers";
 export default async function animeInfo({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ mediaId: string }>;
 }) {
-  const { id } = await params;
+  const { mediaId } = await params;
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const userId = cookieStore.get("userId")?.value;
+  const viewedUserId = cookieStore.get("viewedUserId")?.value;
+
   const isLoggedIn = Boolean(accessToken);
 
   const list = isLoggedIn ? await getAnimeList() : [];
-  const saved = list.find((a: MyAnimeData) => a.id === Number(id));
+  const saved = list.find((a: MyAnimeData) => a.mediaId === Number(mediaId));
   const isOnMyAniList = Boolean(saved);
 
   const ctaButtonClass =
@@ -76,20 +77,26 @@ export default async function animeInfo({
                       <Home className="h-4 w-4" />
                       Back to Home
                     </Link>
-                    <Link href={`/editAnime/${id}`} className={ctaButtonClass}>
+                    <Link
+                      href={`/editAnime/${mediaId}`}
+                      className={ctaButtonClass}
+                    >
                       <Pencil className="h-4 w-4" /> Edit Anime
                     </Link>
                   </>
                 ) : (
                   <Link
-                    href={{ pathname: "/addAnime", query: { id } }}
+                    href={{ pathname: "/addAnime", query: { mediaId } }}
                     className={ctaButtonClass}
                   >
                     <Plus className="h-4 w-4" /> Add Anime
                   </Link>
                 )
               ) : (
-                <Link href={`/viewPage/${userId}`} className={ctaButtonClass}>
+                <Link
+                  href={`/viewPage/${viewedUserId}`}
+                  className={ctaButtonClass}
+                >
                   <List className="h-4 w-4" />
                   Back to List
                 </Link>
@@ -98,12 +105,15 @@ export default async function animeInfo({
           </div>
         </div>
 
-        <AnimeInfo id={Number(id)} />
+        <AnimeInfo mediaId={Number(mediaId)} />
 
         {isLoggedIn && isOnMyAniList ? (
-          <RecommendedAnimeForm mediaId={Number(id)} savedAnimeList={list} />
+          <RecommendedAnimeForm
+            mediaId={Number(mediaId)}
+            savedAnimeList={list}
+          />
         ) : (
-          <RecommendedAnimeForm mediaId={Number(id)} />
+          <RecommendedAnimeForm mediaId={Number(mediaId)} />
         )}
       </div>
     </main>

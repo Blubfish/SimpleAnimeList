@@ -2,11 +2,11 @@ import { fetchUserListEntry } from "@/lib/fetchAnimeById";
 import { PencilIcon, Star } from "lucide-react";
 
 type UserNotesProps = {
-  id: number;
+  mediaId: number;
 };
 
-export default async function UserNotes({ id }: UserNotesProps) {
-  const entry = await fetchUserListEntry(id);
+export default async function UserNotes({ mediaId }: UserNotesProps) {
+  const entry = await fetchUserListEntry(mediaId);
 
   if (!entry) return null;
 

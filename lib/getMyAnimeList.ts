@@ -89,7 +89,7 @@ export default async function getAnimeList() {
             : "",
           coverImage: entry.media.coverImage,
           genres: entry.media.genres,
-          id: entry.media.id,
+          mediaId: entry.media.id,
           episodes: entry.media.episodes,
           tags: (entry.media.tags ?? [])
             .filter((tag: { rank: number }) => tag.rank >= 90)

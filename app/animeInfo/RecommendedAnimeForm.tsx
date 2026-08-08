@@ -25,7 +25,7 @@ export default async function RecommendedAnimeForm({
     .filter(
       (anime: MyAnimeData) =>
         !anime.isAdult &&
-        !savedAnimeList.some((saved) => saved.id === anime.id),
+        !savedAnimeList.some((saved) => saved.mediaId === anime.mediaId),
     )
     .slice(0, 12);
 
@@ -56,8 +56,8 @@ export default async function RecommendedAnimeForm({
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
           {filterRecommendation.map((anime: MyAnimeData) => (
             <Link
-              href={`/animeInfo/${anime.id}`}
-              key={anime.id}
+              href={`/animeInfo/${anime.mediaId}`}
+              key={anime.mediaId}
               className="group relative rounded-2xl border border-slate-800/80 bg-slate-950/80 p-2 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
             >
               <div className="relative overflow-hidden rounded-xl bg-slate-800 w-auto h-auto">

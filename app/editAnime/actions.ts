@@ -69,14 +69,14 @@ export async function handleGet(mediaId: number) {
     const data = await response.json();
 
     if (!response.ok || data.errors) {
-      console.error("AniList Error details:", data.errors || data);
+      console.error("AniList Error details here:", data.errors || data);
       return null;
     } else {
       const entry = data.data.MediaList;
 
       const flattened = entry
         ? {
-            id: entry.id,
+            entryId: entry.id,
             mediaId: entry.mediaId,
             status: reverseStatusMap[entry.status],
             score: entry.score,
@@ -100,7 +100,6 @@ export async function handleGet(mediaId: number) {
           }
         : null;
 
-      console.log("Successfully Retreive:", flattened);
       return flattened;
     }
   } catch (error) {
@@ -109,7 +108,7 @@ export async function handleGet(mediaId: number) {
   }
 }
 
-export async function handleDelete(id: number): Promise<SaveResult> {
+export async function handleDelete(entryId: number): Promise<SaveResult> {
   const cookieStore = cookies();
   const token = (await cookieStore).get("access_token")?.value;
 
@@ -135,7 +134,7 @@ export async function handleDelete(id: number): Promise<SaveResult> {
       body: JSON.stringify({
         query,
         variables: {
-          deleteMediaListEntryId: id,
+          deleteMediaListEntryId: entryId,
         },
       }),
     });
@@ -143,7 +142,7 @@ export async function handleDelete(id: number): Promise<SaveResult> {
     const data = await response.json();
 
     if (!response.ok || data.errors) {
-      console.error("AniList Error details:", data.errors || data);
+      console.error("AniList Error details here2:", data.errors || data);
       return {
         success: false,
         message: data.errors?.[0]?.message || "AniList rejected the delete.",
@@ -209,7 +208,7 @@ export async function handleUpdate(formData: MyAnimeData): Promise<SaveResult> {
     const data = await response.json();
 
     if (!response.ok || data.errors) {
-      console.error("AniList Error details:", data.errors || data);
+      console.error("AniList Error details here3:", data.errors || data);
       return {
         success: false,
         message: data.errors?.[0]?.message || "AniList rejected the save.",

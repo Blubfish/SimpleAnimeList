@@ -9,14 +9,13 @@ import StatPanel from "@/app/StatPanel";
 export default async function ViewPage({
   params,
 }: {
-  params: Promise<{ userId: string }>;
+  params: Promise<{ viewedUserId: string }>;
 }) {
-  const { userId } = await params;
+  const { viewedUserId } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get("access_token")?.value;
 
-  const viewAnimeList = await getViewAnimeList(Number(userId));
-  console.log(viewAnimeList, "Here is the list");
+  const viewAnimeList = await getViewAnimeList(Number(viewedUserId));
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-950 via-slate-950 to-indigo-950 px-4 py-6 sm:px-6 lg:px-8">
@@ -47,7 +46,7 @@ export default async function ViewPage({
               {token ? (
                 <>
                   <Link
-                    href="/"
+                    href={"/"}
                     className="inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50"
                   >
                     <Home className="h-4 w-4" />

@@ -12,7 +12,7 @@ export type animeRecommendation = {
   };
 };
 
-export default async function fetchRecommendations(id: number) {
+export default async function fetchRecommendations(mediaId: number) {
   const query = `
     query ($id: Int) {
             Media(id: $id, type: ANIME) {
@@ -53,7 +53,7 @@ export default async function fetchRecommendations(id: number) {
       },
       body: JSON.stringify({
         query: query,
-        variables: { id: id },
+        variables: { id: mediaId },
       }),
     });
 
@@ -79,12 +79,11 @@ export default async function fetchRecommendations(id: number) {
       .map((n: animeRecommendation) => n.mediaRecommendation)
       .filter(Boolean);
 
-    const flattened = list.map(
-      (anime: { title: { english: string; romaji: string } }) => ({
-        ...anime,
-        title: anime.title.english || anime.title.romaji || "",
-      }),
-    );
+    const flattened = list.map((anime: any) => ({
+      ...anime,
+      title: anime.title.english || anime.title.romaji || "",
+      mediaId: anime.id,
+    }));
 
     return flattened;
   } catch (error) {

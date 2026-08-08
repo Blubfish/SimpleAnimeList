@@ -29,10 +29,10 @@ export default function AnimeForm({
   savedAnimeList = [],
 }: AnimeFormProps) {
   const [formData, setFormData] = useState({
-    id: animeData?.id ?? 0,
+    entryId: animeData?.entryId ?? 0,
     mediaId: animeData?.mediaId ?? 0,
     status: animeData?.status ?? "Planning",
-    score: animeData?.score ?? 1,
+    score: animeData?.score ?? "",
     progress: animeData?.progress ?? "",
     notes: animeData?.notes ?? "",
     title: animeData?.title ?? "",
@@ -56,7 +56,7 @@ export default function AnimeForm({
   const filterAnime = animeOption.filter(
     (anime) =>
       !anime.isAdult &&
-      !savedAnimeList.some((saved) => saved.id === anime.id) &&
+      !savedAnimeList.some((saved) => saved.mediaId === anime.mediaId) &&
       anime.episodes,
   );
 
@@ -87,6 +87,7 @@ export default function AnimeForm({
       const result = await onSubmit({
         ...formData,
         progress: Number(formData.progress) || 0,
+        score: Number(formData.score) || 0,
       });
 
       if (!result.success) {
@@ -141,13 +142,13 @@ export default function AnimeForm({
             {filterAnime.map((anime: MyAnimeData) => (
               <button
                 type="button"
-                key={anime.id}
+                key={anime.mediaId}
                 className="group flex w-full flex-col gap-2 rounded-xl border border-transparent p-2 text-left text-slate-300 transition hover:border-orange-400/40 hover:bg-slate-800/80 hover:text-orange-200"
                 onClick={() => {
                   setFormData({
                     ...formData,
                     title: anime.title || "",
-                    mediaId: anime.id,
+                    mediaId: anime.mediaId,
                     coverImage: anime.coverImage,
                     episodes: anime.episodes,
                   });
@@ -175,36 +176,30 @@ export default function AnimeForm({
 
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <p className="text-xs sm:text-sm font-semibold text-slate-200">
-            Score
-          </p>
-          <Combobox
-            items={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
-            onValueChange={(score) =>
-              setFormData({ ...formData, score: Number(score) })
-            }
-            value={formData.score}
-          >
-            <ComboboxInput
-              readOnly
-              placeholder="Select a score"
-              className=" text-xs sm:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
-            />
-            <ComboboxContent className="text-xs sm:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-red-400 focus-within:ring-orange-400/25">
-              <ComboboxEmpty>No items found.</ComboboxEmpty>
-              <ComboboxList>
-                {(item) => (
-                  <ComboboxItem
-                    key={item}
-                    value={item}
-                    className="text-slate-100 data-highlighted:bg-orange-500/15 data-highlighted:text-orange-200 text-xs sm:text-sm"
-                  >
-                    {item}
-                  </ComboboxItem>
-                )}
-              </ComboboxList>
-            </ComboboxContent>
-          </Combobox>
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="scoreInput"
+              className="text-xs sm:text-sm font-semibold text-slate-200"
+            >
+              Score
+            </label>
+            <input
+              id="scoreInput"
+              type="number"
+              step="0.1"
+              min={0}
+              max={10}
+              placeholder="Enter score here"
+              value={formData.score}
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  score: e.target.value,
+                });
+              }}
+              className="text-xs sm:text-sm w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-slate-100 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
+            ></input>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2">
@@ -295,7 +290,7 @@ export default function AnimeForm({
 
       <AnimePreview
         title={formData.title}
-        score={formData.score}
+        score={Number(formData.score)}
         status={formData.status}
         notes={formData.notes}
         episodes={formData.episodes}

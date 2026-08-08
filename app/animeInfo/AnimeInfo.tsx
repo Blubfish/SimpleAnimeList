@@ -8,12 +8,11 @@ import { Star, Users } from "lucide-react";
 import { sanitizeDescription } from "@/lib/sanitize";
 
 type AnimeInfoProps = {
-  id: number;
+  mediaId: number;
 };
 
-export default async function AnimeInfo({ id }: AnimeInfoProps) {
-  const metadata = await fetchAnimeMetaData(Number(id));
-  console.log(metadata, "metadata");
+export default async function AnimeInfo({ mediaId }: AnimeInfoProps) {
+  const metadata = await fetchAnimeMetaData(Number(mediaId));
 
   if (!metadata) {
     return (
@@ -90,7 +89,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
           </div>
 
           <Suspense fallback={null}>
-            <UserNotes id={Number(id)} />
+            <UserNotes mediaId={Number(mediaId)} />
           </Suspense>
 
           <div className="h-px w-full bg-linear-to-r from-transparent via-slate-700/60 to-transparent" />
@@ -180,7 +179,7 @@ export default async function AnimeInfo({ id }: AnimeInfoProps) {
                 <div
                   className="h-full rounded-full bg-linear-to-r from-emerald-500 to-teal-400 shadow-[0_0_12px_rgba(16,185,129,0.45)]"
                   style={{
-                    width: `${metadata.averageScore ? (metadata.averageScore / 100) * 100 : 0}%`,
+                    width: `${metadata.averageScore ? metadata.averageScore : 0}%`,
                   }}
                 />
               </div>

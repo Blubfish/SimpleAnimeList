@@ -74,7 +74,7 @@ export async function getViewAnimeList(userId: number) {
             : "",
           coverImage: entry.media.coverImage,
           genres: entry.media.genres,
-          id: entry.media.id,
+          mediaId: entry.media.id,
           episodes: entry.media.episodes,
           tags: (entry.media.tags ?? [])
             .filter((tag: { rank: number }) => tag.rank >= 90)
@@ -85,7 +85,7 @@ export async function getViewAnimeList(userId: number) {
           popularity: entry.media.popularity,
           updatedAt: entry.updatedAt,
           createdAt: entry.createdAt,
-          bannerImage: entry.media.bannerImage
+          bannerImage: entry.media.bannerImage,
         })),
     );
     return allAnime.sort((a, b) => (b.score ?? 0) - (a.score ?? 0)) ?? [];

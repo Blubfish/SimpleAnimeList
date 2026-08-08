@@ -49,7 +49,7 @@ export default function EditAnimePage({
                   setDeleteError(null);
                   setIsDeleting(true);
 
-                  const result = await handleDelete(animeData.id);
+                  const result = await handleDelete(animeData.entryId);
 
                   if (!result.success) {
                     setDeleteError(
