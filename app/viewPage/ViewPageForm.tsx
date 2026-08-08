@@ -32,7 +32,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
   const [genreFilter, setGenreFilter] = useState<string[]>([]);
   const [tagFilter, setTagFilter] = useState<string[]>([]);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
-  const [currentList, setCurrentList] = useState<MyAnimeData[]>(viewAnimeList);
+  const [currentList, setCurrentList] = useState(viewAnimeList);
   const filteredAnimeList = currentList.filter(
     (anime) =>
       anime.title.toLowerCase().includes(search.toLowerCase()) &&
@@ -42,22 +42,23 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
       (genreFilter.length === 0 ||
         anime.genres.some((genre: string) => genreFilter.includes(genre))),
   );
+
   return (
     <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
-      <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
-            Library
+          <p className="text-xs md:text-sm uppercase tracking-[0.28em] text-orange-300/80">
+            Your library
           </p>
           <h2 className="mt-2 text-2xl font-bold text-slate-100">All anime</h2>
         </div>
       </div>
 
       <div className="mb-6 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 ring-1 ring-slate-800/60">
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div className="mb-4 flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-100">Filters</h3>
-            <p className="text-xs sm:text-sm text-slate-500">
+            <p className="text-xs md:text-sm text-slate-500">
               Refine the list by status, genre, or tag
             </p>
           </div>
@@ -70,7 +71,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
           <div className="space-y-2 col-span-2 xl:col-span-1">
             <label
               htmlFor="searchAnimeName"
-              className="block text-xs sm:text-sm font-semibold text-slate-200"
+              className="block text-xs md:text-sm font-semibold text-slate-200"
             >
               Search
             </label>
@@ -80,11 +81,11 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
               placeholder="Search by anime name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="min-h-11 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-xs sm:text-sm text-slate-100 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
+              className="min-h-11 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-2 text-xs md:text-sm text-slate-100 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/25"
             />
           </div>
           <div className="space-y-2">
-            <p className="block text-xs sm:text-sm font-semibold text-slate-100 ">
+            <p className="block text-xs md:text-sm font-semibold text-slate-100 ">
               Order
             </p>
             <Combobox
@@ -110,18 +111,14 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
               onValueChange={async (e) => {
                 setListOrder(e ?? "");
                 setCurrentList(
-                  await getSortAnimeList(
-                    e ?? "Score: High to Low",
-                    viewAnimeList,
-                  ),
+                  await getSortAnimeList(e ?? "Score: High to Low", viewAnimeList),
                 );
               }}
               value={listOrder}
             >
               <ComboboxInput
-                readOnly
                 placeholder="Select List Order"
-                className="[&_input::placeholder]:text-slate-500 [&_input::placeholder]:opacity-100 min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
+                className="[&_input::placeholder]:text-slate-500 [&_input::placeholder]:opacity-100 [&_input::placeholder]:text-xs [&_input::placeholder]:md:text-sm min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm has-[[data-slot=input-group-control]:focus-visible]:border-orange-400 has-[[data-slot=input-group-control]:focus-visible]:ring-2 has-[[data-slot=input-group-control]:focus-visible]:ring-orange-400/25"
               />
               <ComboboxContent className="min-h-11 w-full border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 shadow-sm focus-within:border-red-400 focus-within:ring-orange-400/25">
                 <ComboboxEmpty>No items found.</ComboboxEmpty>
@@ -139,8 +136,9 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
               </ComboboxContent>
             </Combobox>
           </div>
+
           <div className="space-y-2">
-            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+            <p className="block text-xs md:text-sm font-semibold text-slate-200">
               Status
             </p>
             <FilterForm
@@ -152,7 +150,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
           </div>
 
           <div className="space-y-2">
-            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+            <p className="block text-xs md:text-sm font-semibold text-slate-200">
               Genres
             </p>
             <FilterForm
@@ -164,7 +162,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
           </div>
 
           <div className="space-y-2">
-            <p className="block text-xs sm:text-sm font-semibold text-slate-200">
+            <p className="block text-xs md:text-sm font-semibold text-slate-200">
               Tags
             </p>
             <FilterForm
@@ -182,19 +180,19 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
         <div className="rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/40 p-8 text-center">
           <Search className="mx-auto h-12 w-12 text-slate-500" />
           <p className="mt-4 text-slate-300">No anime found for {search}</p>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs md:text-sm text-slate-500">
             Try a different search term
           </p>
         </div>
       ) : filteredAnimeList.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-700/70 bg-slate-900/40 p-8 text-center">
           <p className="text-slate-300">No anime yet</p>
-          <p className="text-xs sm:text-sm text-slate-500">
+          <p className="text-xs md:text-sm text-slate-500">
             Add your first anime to get started
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {filteredAnimeList.map((anime, index) => {
             const genres = anime.genres.filter(Boolean);
             const tags = anime.tags.filter(Boolean);
@@ -204,13 +202,13 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
             return (
               <Link
                 key={anime.mediaId}
-                className="relative overflow-hidden group block w-full rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
+                className="relative overflow-hidden group block w-full min-h-[126px] h-auto md:h-[150px] lg:h-[210px] rounded-2xl border border-slate-800/80 bg-slate-950/70 p-3 text-left text-slate-300 shadow-lg shadow-black/30 ring-1 ring-transparent transition hover:-translate-y-0.5 hover:border-orange-400/50 hover:shadow-orange-500/10 hover:ring-orange-400/20"
                 href={`/animeInfo/${anime.mediaId}`}
               >
                 {/* Blurred background */}
 
                 <div
-                  className="absolute inset-0 scale-125 bg-cover bg-center blur-none"
+                  className="absolute inset-0 bg-cover bg-center blur-none"
                   style={{
                     backgroundImage: `url(${anime.bannerImage})`,
                   }}
@@ -219,8 +217,8 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                 {/* Dark overlay */}
 
                 <div className="absolute inset-0 bg-slate-950/80" />
-                <div className="flex gap-3 sm:gap-4 relative z-10">
-                  <div className="h-[100px] w-[70px] sm:h-42.5 sm:w-30 shrink-0 overflow-hidden rounded-xl bg-slate-800 ring-1 ring-slate-700/80">
+                <div className="flex gap-3 md:gap-4 relative z-10">
+                  <div className="h-[100px] w-[70px] md:h-[130px] md:w-[99px] lg:h-42.5 lg:w-30 shrink-0 overflow-hidden rounded-xl bg-slate-800 ring-1 ring-slate-700/80">
                     {anime.coverImage.large ? (
                       <Image
                         src={anime.coverImage.large}
@@ -239,12 +237,12 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
-                      <h3 className="text-sm sm:text-lg font-bold text-slate-100 group-hover:text-orange-300 break-words">
+                    <div className="flex flex-row items-start justify-between gap-2 md:gap-3">
+                      <h3 className="min-w-0 flex-1 text-xs lg:text-lg font-bold text-slate-100 group-hover:text-orange-300 break-words md:line-clamp-3  lg:line-clamp-2">
                         {anime.title}
                       </h3>
 
-                      <span className="w-fit shrink-0 inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-sm font-semibold text-orange-300 ring-1 ring-orange-400/20">
+                      <span className="w-fit shrink-0 inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2 py-0.5 md:px-2.5 md:py-1 lg:px-3 lg:py-1 text-[10px] md:text-xs lg:text-sm font-semibold text-orange-300 ring-1 ring-orange-400/20">
                         {anime.score === 10 && (
                           <Star fill="orange" className="h-3 w-3" />
                         )}
@@ -252,26 +250,26 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                       </span>
                     </div>
 
-                    <div className="mt-1.5 sm:mt-2 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                    <div className="mt-1.5 md:mt-2 flex flex-wrap items-center gap-1.5 md:gap-2 text-[11px] md:text-xs lg:text-sm">
                       <span
-                        className={`rounded-full px-2 py-0.5 sm:px-3 sm:py-1 font-medium bg-slate-800 ${statusClasses[anime.status] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
+                        className={`rounded-full px-2 py-0.5 md:px-2.5 md:py-0.5 lg:px-3 lg:py-1 font-medium bg-slate-800 ${statusClasses[anime.status] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
                       >
                         {anime.status}
                       </span>
 
                       {hasEpisodes && (
-                        <span className="rounded-full bg-slate-800 px-2 py-0.5 sm:px-3 sm:py-1 font-medium text-slate-300 ring-1 ring-slate-700">
+                        <span className="rounded-full bg-slate-800 px-2 py-0.5 md:px-2.5 md:py-0.5 lg:px-3 lg:py-1 font-medium text-slate-300 ring-1 ring-slate-700">
                           {progress}/{anime.episodes} episodes
                         </span>
                       )}
                     </div>
                     <aside className="hidden lg:block">
                       {(genres.length > 0 || tags.length > 0) && (
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <div className="mt-2 lg:mt-3 flex flex-wrap items-center gap-1.5 lg:gap-2">
                           {genres.map((genre: string) => (
                             <span
                               key={`${genre}`}
-                              className={`rounded-full px-2.5 py-1 text-xs font-medium ${genreClasses[genre] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
+                              className={`rounded-full px-2 py-0.5 lg:px-2.5 lg:py-1 text-[11px] lg:text-xs font-medium ${genreClasses[genre] ?? "bg-slate-800 text-slate-300 ring-slate-700"}`}
                             >
                               {genre}
                             </span>
@@ -280,7 +278,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                           {tags.map((tag: string) => (
                             <span
                               key={`${tag}`}
-                              className={`rounded-full px-2.5 py-1 text-xs font-medium ${tagClasses[tag] ?? "bg-orange-500/10 text-orange-200 ring-orange-500/20"} truncate`}
+                              className={`hidden lg:inline-block rounded-full px-2.5 py-1 text-xs font-medium ${tagClasses[tag] ?? "bg-orange-500/10 text-orange-200 ring-orange-500/20"} truncate`}
                             >
                               {tag}
                             </span>
@@ -289,8 +287,8 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                       )}
                     </aside>
 
-                    {anime.notes && (
-                      <p className="mt-2 sm:mt-3 line-clamp-3 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-400">
+                     {anime.notes && (
+                      <p className="hidden md:line-clamp-1 mt-1.5 md:mt-2 lg:mt-3 text-xs md:text-xs lg:text-sm leading-4 md:leading-5 lg:leading-6 text-slate-400">
                         {anime.notes}
                       </p>
                     )}

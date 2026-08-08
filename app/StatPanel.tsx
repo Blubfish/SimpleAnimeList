@@ -39,20 +39,20 @@ export default function StatPanel({ myAnimeList }: StatPanelProps) {
   ).length;
 
   return (
-    <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-4 sm:p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
-      <div className="mb-4 sm:mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <section className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-4 md:p-5 lg:p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
+      <div className="mb-4 md:mb-5 lg:mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs sm:text-sm uppercase tracking-[0.28em] text-orange-300/80">
+          <p className="text-xs md:text-xs lg:text-sm uppercase tracking-[0.28em] text-orange-300/80">
             Anime summary
           </p>
           <h2 className="mt-2 text-2xl font-bold text-slate-100">Your stats</h2>
         </div>
-        <p className="text-xs sm:text-sm text-slate-400">
+        <p className="text-xs md:text-xs lg:text-sm text-slate-400">
           Total tracked anime and current status breakdown
         </p>
       </div>
 
-      <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-4">
+      <div className="grid gap-3 md:gap-3.5 lg:gap-4 grid-cols-2 md:grid-cols-4">
         {[
           {
             label: "Total anime",
@@ -113,19 +113,19 @@ export default function StatPanel({ myAnimeList }: StatPanelProps) {
         ].map((item) => (
           <div
             key={item.label}
-            className={`rounded-2xl p-3.5 sm:p-5 ring-1 ${item.accent} transition`}
+            className={`rounded-2xl p-3.5 md:p-4 lg:p-5 ring-1 ${item.accent} transition`}
           >
-            <div className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 md:gap-2">
               <span
-                className={`${item.iconColor} [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-5 sm:[&_svg]:w-5`}
+                className={`${item.iconColor} [&_svg]:h-4 [&_svg]:w-4 md:[&_svg]:h-4.5 md:[&_svg]:w-4.5 lg:[&_svg]:h-5 lg:[&_svg]:w-5`}
               >
                 {item.icon}
               </span>
-              <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.15em] sm:tracking-[0.18em] line-clamp-2 truncate">
+              <p className="text-xs md:text-xs lg:text-sm font-medium uppercase tracking-[0.15em] lg:tracking-[0.18em] line-clamp-2 truncate">
                 {item.label}
               </p>
             </div>
-            <p className="mt-2.5 sm:mt-4 text-2xl sm:text-3xl font-bold text-slate-100">
+            <p className="mt-2.5 md:mt-3 lg:mt-4 text-2xl md:text-2xl lg:text-3xl font-bold text-slate-100">
               {item.value}
             </p>
           </div>

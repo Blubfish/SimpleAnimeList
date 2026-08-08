@@ -36,15 +36,14 @@ export default async function fetchAnimeByName(title: string) {
 
     const media = data?.data?.Page.media ?? [];
     return media.map(
-      (anime: {
-        title: { english: string; romaji: string; native: string };
-      }) => ({
+      (anime: any) => ({
         ...anime,
         title:
           anime.title?.english ??
           anime.title?.romaji ??
           anime.title?.native ??
           "",
+          mediaId: anime.id,
       }),
     );
   } catch (error) {
