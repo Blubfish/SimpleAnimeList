@@ -6,6 +6,7 @@ import AnimeInfo from "../AnimeInfo";
 import { MyAnimeData } from "@/app/type";
 import { Home, Pencil, Plus, List } from "lucide-react";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 
 export default async function animeInfo({
   params,
@@ -107,14 +108,16 @@ export default async function animeInfo({
 
         <AnimeInfo mediaId={Number(mediaId)} />
 
-        {isLoggedIn && isOnMyAniList ? (
-          <RecommendedAnimeForm
-            mediaId={Number(mediaId)}
-            savedAnimeList={list}
-          />
-        ) : (
-          <RecommendedAnimeForm mediaId={Number(mediaId)} />
-        )}
+        <Suspense>
+          {isLoggedIn && isOnMyAniList ? (
+            <RecommendedAnimeForm
+              mediaId={Number(mediaId)}
+              savedAnimeList={list}
+            />
+          ) : (
+            <RecommendedAnimeForm mediaId={Number(mediaId)} />
+          )}
+        </Suspense>
       </div>
     </main>
   );
