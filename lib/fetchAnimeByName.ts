@@ -35,17 +35,15 @@ export default async function fetchAnimeByName(title: string) {
     const data = await response.json();
 
     const media = data?.data?.Page.media ?? [];
-    return media.map(
-      (anime: any) => ({
-        ...anime,
-        title:
-          anime.title?.english ??
-          anime.title?.romaji ??
-          anime.title?.native ??
-          "",
-          mediaId: anime.id,
-      }),
-    );
+    return media.map((anime: any) => ({
+      ...anime,
+      title:
+        anime.title?.english ??
+        anime.title?.romaji ??
+        anime.title?.native ??
+        "",
+      mediaId: anime.id,
+    }));
   } catch (error) {
     console.error(error);
     return [];

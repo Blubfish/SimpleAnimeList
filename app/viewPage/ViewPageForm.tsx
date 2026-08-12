@@ -111,7 +111,10 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
               onValueChange={async (e) => {
                 setListOrder(e ?? "");
                 setCurrentList(
-                  await getSortAnimeList(e ?? "Score: High to Low", viewAnimeList),
+                  await getSortAnimeList(
+                    e ?? "Score: High to Low",
+                    viewAnimeList,
+                  ),
                 );
               }}
               value={listOrder}
@@ -287,7 +290,7 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                       )}
                     </aside>
 
-                     {anime.notes && (
+                    {anime.notes && (
                       <p className="hidden md:line-clamp-1 mt-1.5 md:mt-2 lg:mt-3 text-xs md:text-xs lg:text-sm leading-4 md:leading-5 lg:leading-6 text-slate-400">
                         {anime.notes}
                       </p>
