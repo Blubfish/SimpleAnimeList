@@ -162,7 +162,6 @@ export default function AnimeForm({
                     width={120}
                     height={170}
                     className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    unoptimized
                   />
                 </div>
                 <p className="line-clamp-2 text-xs sm:text-sm font-medium text-slate-200 group-hover:text-orange-200">

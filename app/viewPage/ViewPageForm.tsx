@@ -210,15 +210,17 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
               >
                 {/* Blurred background */}
 
-                <div
-                  className="absolute inset-0 bg-cover bg-center blur-none"
-                  style={{
-                    backgroundImage: `url(${anime.bannerImage})`,
-                  }}
-                />
+                {anime.bannerImage && (
+                  <Image
+                    src={anime.bannerImage}
+                    alt=""
+                    fill
+                    className="object-cover blur-none"
+                    sizes="(max-width: 768px) 100vw, 400px"
+                  />
+                )}
 
                 {/* Dark overlay */}
-
                 <div className="absolute inset-0 bg-slate-950/80" />
                 <div className="flex gap-3 md:gap-4 relative z-10">
                   <div className="h-[100px] w-[70px] md:h-[130px] md:w-[99px] lg:h-42.5 lg:w-30 shrink-0 overflow-hidden rounded-xl bg-slate-800 ring-1 ring-slate-700/80">
@@ -230,7 +232,6 @@ export default function ViewPageForm({ viewAnimeList }: ViewPageForm) {
                         height={170}
                         className="h-full w-full object-cover"
                         priority={index === 0}
-                        unoptimized
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-xs font-semibold text-slate-500">

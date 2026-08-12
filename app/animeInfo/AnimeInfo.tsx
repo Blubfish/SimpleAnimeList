@@ -39,16 +39,19 @@ export default async function AnimeInfo({ mediaId }: AnimeInfoProps) {
     <article className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/90 via-slate-900/70 to-slate-950/90 p-4 sm:p-6 shadow-2xl shadow-black/40 backdrop-blur-xl">
       {/* Blurred background */}
 
-      <div
-        className="absolute inset-0 bg-cover bg-center blur-none"
-        style={{
-          backgroundImage: `url(${metadata.bannerImage})`,
-        }}
-      />
+      {metadata.bannerImage && (
+        <Image
+          src={metadata.bannerImage}
+          alt=""
+          fill
+          className="object-cover blur-none"
+          sizes="(max-width: 768px) 100vw, 400px"
+        />
+      )}
 
       {/* Dark overlay */}
+      <div className="absolute inset-0 bg-slate-950/85" />
 
-      <div className="absolute inset-0 bg-slate-950/90" />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start relative z-10">
         <div className="relative shrink-0 mx-auto w-64 lg:mx-0 lg:w-70">
           <div
@@ -66,7 +69,6 @@ export default async function AnimeInfo({ mediaId }: AnimeInfoProps) {
               width={280}
               height={420}
               className="h-full w-full object-cover"
-              unoptimized
             />
           </div>
         </div>

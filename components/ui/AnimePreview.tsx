@@ -85,7 +85,6 @@ export default function AnimePreview({
               width={120}
               height={170}
               className="h-full w-full object-cover"
-              unoptimized
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center px-3 text-center text-xs font-semibold text-slate-500">

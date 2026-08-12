@@ -69,7 +69,6 @@ export default async function RecommendedAnimeForm({
                   width={120}
                   height={180}
                   className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  unoptimized
                 />
               </div>
 
