@@ -8,10 +8,10 @@ const nextConfig: NextConfig = {
         hostname: "s4.anilist.co",
       },
     ],
-    minimumCacheTTL: 2678400, 
-    formats: ['image/webp'],
-    imageSizes: [70, 99, 120, 230], 
-    deviceSizes: [400, 768, 1024], 
+    minimumCacheTTL: 2678400,
+    formats: ["image/webp"],
+    imageSizes: [70, 99, 120, 230],
+    deviceSizes: [400, 768, 1024],
   },
 };
 

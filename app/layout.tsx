@@ -3,6 +3,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/next";
+import ScrollUpButton from "@/components/ScrollUpButton";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className="min-h-full flex flex-col">
         {children}
+        <ScrollUpButton />
         <Analytics />
       </body>
     </html>
