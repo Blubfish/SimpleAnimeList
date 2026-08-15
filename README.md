@@ -4,7 +4,8 @@ A simpler, more direct anime list built on the AniList API that solely focuses o
 
 Accessed at https://simpleanimelist.vercel.app.
 
-<img width="1537" height="901" alt="Screenshot 2026-07-27 at 11 28 49 AM" src="https://github.com/user-attachments/assets/58e196dd-5d36-4a71-ae69-16ae3136f320" />
+<img width="1689" height="901" alt="Screenshot 2026-08-15 at 10 44 27 AM" src="https://github.com/user-attachments/assets/7c9edab0-034e-4617-944c-b68a7afc9e64" />
+
 
 ## Motivation
 
