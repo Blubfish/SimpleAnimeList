@@ -12,18 +12,20 @@ export default async function AddAnime({
 }) {
   const { mediaId } = await searchParams;
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get("access_token")?.value;
+  const userId = cookieStore.get("userId")?.value;
+
   let metadata = null;
   let entry = null;
 
   if (mediaId) {
     [metadata, entry] = await Promise.all([
       fetchAnimeMetaData(Number(mediaId)),
-      fetchUserListEntry(Number(mediaId)),
+      fetchUserListEntry(Number(mediaId), Number(userId)),
     ]);
   }
 
-  const cookieStore = cookies();
-  const token = (await cookieStore).get("access_token")?.value;
   if (!token) redirect("/");
 
   const animeData: MyAnimeData = {

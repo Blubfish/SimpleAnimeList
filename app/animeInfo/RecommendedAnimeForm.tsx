@@ -1,29 +1,28 @@
-import fetchRecommendations from "@/lib/fetchRecommendations";
 import Image from "next/image";
 import Link from "next/link";
-import { MyAnimeData } from "../type";
+import { animeRecommendation, MyAnimeData } from "../type";
 import { Star } from "lucide-react";
 import { sanitizeDescription } from "@/lib/sanitize";
 
 type RecommendedAnimeFormProps = {
-  mediaId: number;
   savedAnimeList?: MyAnimeData[];
+  recommendations?: animeRecommendation[];
 };
 export default async function RecommendedAnimeForm({
-  mediaId,
   savedAnimeList = [],
+  recommendations = [],
 }: RecommendedAnimeFormProps) {
-  const recommendedAnime = (await fetchRecommendations(mediaId)) ?? [];
+  const recommendedAnime = recommendations;
 
   const mappedRecommendations = (recommendedAnime ?? [])
-    .filter((anime: MyAnimeData) => anime !== null)
-    .map((anime: MyAnimeData) => ({
+    .filter((anime: animeRecommendation) => anime !== null)
+    .map((anime: animeRecommendation) => ({
       ...anime,
     }));
 
   const filterRecommendation = mappedRecommendations
     .filter(
-      (anime: MyAnimeData) =>
+      (anime: animeRecommendation) =>
         !anime.isAdult &&
         !savedAnimeList.some((saved) => saved.mediaId === anime.mediaId),
     )
@@ -54,7 +53,7 @@ export default async function RecommendedAnimeForm({
 
       {filterRecommendation.length > 0 ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
-          {filterRecommendation.map((anime: MyAnimeData) => (
+          {filterRecommendation.map((anime: animeRecommendation) => (
             <Link
               href={`/animeInfo/${anime.mediaId}`}
               key={anime.mediaId}
@@ -62,9 +61,7 @@ export default async function RecommendedAnimeForm({
             >
               <div className="relative overflow-hidden rounded-xl bg-slate-800 w-auto h-auto">
                 <Image
-                  src={
-                    anime.coverImage.large || anime.coverImage.extraLarge || ""
-                  }
+                  src={anime.coverImage.large || ""}
                   alt={anime.title || "Anime cover"}
                   width={120}
                   height={180}

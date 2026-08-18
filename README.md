@@ -6,7 +6,6 @@ Accessed at https://simpleanimelist.vercel.app.
 
 <img width="1689" height="901" alt="Screenshot 2026-08-15 at 10 44 27 AM" src="https://github.com/user-attachments/assets/7c9edab0-034e-4617-944c-b68a7afc9e64" />
 
-
 ## Motivation
 
 I want to learn Next.js and build a simple anime tracker list (replacing my Google Doc).

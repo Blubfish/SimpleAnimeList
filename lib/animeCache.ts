@@ -1,4 +1,5 @@
 import pool from "./connectDB";
+import { animeRecommendation } from "@/app/type";
 
 export async function checkCache(mediaId: number) {
   if (!mediaId) return null;
@@ -38,6 +39,7 @@ export async function updateCache(mediaData: {
   popularity: number;
   averageScore: number;
   bannerImage: string;
+  recommendations: animeRecommendation[];
 }) {
   await pool.query(
     `INSERT INTO anime_cache (
@@ -52,8 +54,9 @@ export async function updateCache(mediaData: {
       popularity,
       average_score,
       banner_image,
+      recommendations,
       updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
     ON CONFLICT (anilist_id) DO UPDATE SET
       title = EXCLUDED.title,
       cover_image = EXCLUDED.cover_image,
@@ -65,11 +68,12 @@ export async function updateCache(mediaData: {
       popularity = EXCLUDED.popularity,
       average_score = EXCLUDED.average_score,
       banner_image = EXCLUDED.banner_image,
+      recommendations = EXCLUDED.recommendations,
       updated_at = now()`,
     [
       mediaData.mediaId,
       mediaData.title,
-      mediaData.coverImage,
+      JSON.stringify(mediaData.coverImage),
       mediaData.episodes,
       mediaData.genres,
       mediaData.tags,
@@ -78,6 +82,7 @@ export async function updateCache(mediaData: {
       mediaData.popularity,
       mediaData.averageScore,
       mediaData.bannerImage,
+      JSON.stringify(mediaData.recommendations),
     ],
   );
 }

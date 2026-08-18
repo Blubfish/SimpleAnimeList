@@ -1,4 +1,3 @@
-import { fetchAnimeMetaData } from "@/lib/fetchAnimeById";
 import Image from "next/image";
 import Link from "next/link";
 import { genreClasses, tagClasses } from "@/components/ui/colorStyles";
@@ -6,14 +5,19 @@ import { Suspense } from "react";
 import UserNotes from "./UserNotes";
 import { Star, Users } from "lucide-react";
 import { sanitizeDescription } from "@/lib/sanitize";
+import { MyAnimeDataMetaData } from "../type";
 
 type AnimeInfoProps = {
   mediaId: number;
+  metadata: MyAnimeDataMetaData | null;
+  targetUserId: number;
 };
 
-export default async function AnimeInfo({ mediaId }: AnimeInfoProps) {
-  const metadata = await fetchAnimeMetaData(Number(mediaId));
-
+export default async function AnimeInfo({
+  mediaId,
+  metadata,
+  targetUserId,
+}: AnimeInfoProps) {
   if (!metadata) {
     return (
       <div className="rounded-3xl border border-slate-800/80 bg-linear-to-br from-slate-900/80 to-slate-950/80 p-8 text-slate-300 shadow-2xl shadow-black/40 backdrop-blur-xl">
@@ -91,7 +95,7 @@ export default async function AnimeInfo({ mediaId }: AnimeInfoProps) {
           </div>
 
           <Suspense fallback={null}>
-            <UserNotes mediaId={Number(mediaId)} />
+            <UserNotes mediaId={Number(mediaId)} targetUserId={targetUserId} />
           </Suspense>
 
           <div className="h-px w-full bg-linear-to-r from-transparent via-slate-700/60 to-transparent" />

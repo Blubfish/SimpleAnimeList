@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { updateCache, checkCache } from "./animeCache";
+import { animeRecommendation } from "@/app/type";
 
 export async function fetchAnimeMetaData(mediaId: number) {
   if (!mediaId) return null;
@@ -29,28 +30,50 @@ export async function fetchAnimeMetaData(mediaId: number) {
         popularity
         averageScore
         bannerImage
+        recommendations {
+          nodes {
+            mediaRecommendation {
+              id
+              description(asHtml: true)
+              title {
+                romaji
+                english
+              }
+              coverImage {
+                large
+              }
+              genres
+              isAdult
+            }
+          }
+        }
       }
     }
   `;
 
+  const needsFetch =
+    cacheData === null ||
+    cacheData.cover_image == null ||
+    cacheData.recommendations == null;
+
   try {
-    const mediaRes =
-      cacheData === null || cacheData.cover_image != null
-        ? await fetch("https://graphql.anilist.co", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              query: mediaQuery,
-              variables: { mediaId },
-            }),
-          })
-        : null;
+    const mediaRes = needsFetch
+      ? await fetch("https://graphql.anilist.co", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            query: mediaQuery,
+            variables: { mediaId },
+          }),
+        })
+      : null;
 
     let mediaData = null;
     let media = null;
+    let recommendations: animeRecommendation[] = [];
 
     if (mediaRes) {
       mediaData = await mediaRes.json();
@@ -60,6 +83,19 @@ export async function fetchAnimeMetaData(mediaId: number) {
         console.error("AniList Media Error:", mediaData.errors || mediaData);
         return null;
       }
+    }
+
+    const recommendationsNodes = media?.recommendations?.nodes;
+
+    if (recommendationsNodes) {
+      recommendations = recommendationsNodes
+        .map((n: any) => n.mediaRecommendation)
+        .filter(Boolean)
+        .map((anime: any) => ({
+          ...anime,
+          title: anime.title.english || anime.title.romaji || "",
+          mediaId: anime.id,
+        }));
     }
 
     const flattened = {
@@ -81,9 +117,12 @@ export async function fetchAnimeMetaData(mediaId: number) {
       popularity: cacheData?.popularity ?? media?.popularity ?? 0,
       averageScore: cacheData?.average_score ?? media?.averageScore ?? 0,
       bannerImage: cacheData?.banner_image ?? media?.bannerImage ?? " ",
+      recommendations: recommendations.length
+        ? recommendations
+        : (cacheData?.recommendations ?? []),
     };
 
-    if (!cacheData) {
+    if (needsFetch) {
       try {
         await updateCache(flattened);
       } catch (err) {
@@ -98,10 +137,13 @@ export async function fetchAnimeMetaData(mediaId: number) {
   }
 }
 
-export async function fetchUserListEntry(mediaId: number) {
+export async function fetchUserListEntry(
+  mediaId: number,
+  targetUserId: number,
+) {
   if (!mediaId) return null;
+
   const cookieStore = await cookies();
-  const userId = cookieStore.get("userId")?.value;
   const token = cookieStore.get("access_token")?.value;
 
   const listQuery = `
@@ -116,7 +158,7 @@ export async function fetchUserListEntry(mediaId: number) {
     }
   `;
 
-  if (!userId) {
+  if (!targetUserId) {
     console.error("userId is not available");
     return null;
   }
@@ -141,7 +183,7 @@ export async function fetchUserListEntry(mediaId: number) {
       body: JSON.stringify({
         query: listQuery,
         variables: {
-          userId: Number(userId),
+          userId: Number(targetUserId),
           mediaId: mediaId,
         },
       }),

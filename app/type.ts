@@ -28,3 +28,28 @@ export type MyAnimeData = AnimeListCore & {
   updatedAt: number;
   bannerImage: string;
 };
+
+export type MyAnimeDataMetaData = {
+  title: string;
+  coverImage: { large: string; extraLarge: string };
+  genres: string[];
+  episodes: number;
+  tags: string[];
+  isAdult: boolean;
+  description: string;
+  popularity: number;
+  averageScore: number;
+  bannerImage: string;
+  recommendations: animeRecommendation[];
+};
+
+export type animeRecommendation = {
+  mediaId: number;
+  title: string;
+  coverImage: {
+    large: string;
+  };
+  genres: string;
+  isAdult: boolean;
+  description: string;
+};

@@ -3,27 +3,34 @@ import BackButton from "@/components/ui/BackButton";
 import getAnimeList from "@/lib/getMyAnimeList";
 import RecommendedAnimeForm from "../RecommendedAnimeForm";
 import AnimeInfo from "../AnimeInfo";
-import { MyAnimeData } from "@/app/type";
+import { MyAnimeData, MyAnimeDataMetaData } from "@/app/type";
 import { Home, Pencil, Plus, List } from "lucide-react";
 import { cookies } from "next/headers";
-import { Suspense } from "react";
+import { fetchAnimeMetaData } from "@/lib/fetchAnimeById";
 
 export default async function animeInfo({
   params,
+  searchParams,
 }: {
   params: Promise<{ mediaId: string }>;
+  searchParams: Promise<{ userId: string }>;
 }) {
   const { mediaId } = await params;
+  const { userId } = await searchParams;
 
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  const viewedUserId = cookieStore.get("viewedUserId")?.value;
+  const fallbackId = cookieStore.get("userId")?.value;
 
   const isLoggedIn = Boolean(accessToken);
 
   const list = isLoggedIn ? await getAnimeList() : [];
   const saved = list.find((a: MyAnimeData) => a.mediaId === Number(mediaId));
   const isOnMyAniList = Boolean(saved);
+
+  const metadata: MyAnimeDataMetaData | null = await fetchAnimeMetaData(
+    Number(mediaId),
+  );
 
   const ctaButtonClass =
     "inline-flex items-center justify-center gap-2 rounded-3xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 shadow-md shadow-orange-500/20 ring-1 ring-orange-300/30 transition hover:brightness-110 hover:shadow-orange-500/40 focus:outline-none focus:ring-2 focus:ring-orange-300/50";
@@ -95,7 +102,7 @@ export default async function animeInfo({
                 )
               ) : (
                 <Link
-                  href={`/viewPage/${viewedUserId}`}
+                  href={`/viewPage/${Number(userId || fallbackId)}`}
                   className={ctaButtonClass}
                 >
                   <List className="h-4 w-4" />
@@ -106,18 +113,16 @@ export default async function animeInfo({
           </div>
         </div>
 
-        <AnimeInfo mediaId={Number(mediaId)} />
+        <AnimeInfo
+          mediaId={Number(mediaId)}
+          metadata={metadata}
+          targetUserId={Number(userId || fallbackId)}
+        />
 
-        <Suspense>
-          {isLoggedIn && isOnMyAniList ? (
-            <RecommendedAnimeForm
-              mediaId={Number(mediaId)}
-              savedAnimeList={list}
-            />
-          ) : (
-            <RecommendedAnimeForm mediaId={Number(mediaId)} />
-          )}
-        </Suspense>
+        <RecommendedAnimeForm
+          savedAnimeList={list}
+          recommendations={metadata?.recommendations}
+        />
       </div>
     </main>
   );

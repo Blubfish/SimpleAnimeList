@@ -3,10 +3,14 @@ import { PencilIcon, Star } from "lucide-react";
 
 type UserNotesProps = {
   mediaId: number;
+  targetUserId: number;
 };
 
-export default async function UserNotes({ mediaId }: UserNotesProps) {
-  const entry = await fetchUserListEntry(mediaId);
+export default async function UserNotes({
+  mediaId,
+  targetUserId,
+}: UserNotesProps) {
+  const entry = await fetchUserListEntry(mediaId, targetUserId);
 
   if (!entry) return null;
 

@@ -67,7 +67,10 @@ export default async function ViewPage({
           </div>
         </div>
         <StatPanel myAnimeList={viewAnimeList} />
-        <ViewPageForm viewAnimeList={viewAnimeList} />
+        <ViewPageForm
+          viewAnimeList={viewAnimeList}
+          viewedUserId={Number(viewedUserId)}
+        />
       </div>
     </main>
   );
