@@ -11,12 +11,18 @@ type AnimeInfoProps = {
   mediaId: number;
   metadata: MyAnimeDataMetaData | null;
   targetUserId: number;
+  isOnMyAniList: boolean;
+  isLogIn: boolean;
+  logInUserId: number;
 };
 
 export default async function AnimeInfo({
   mediaId,
   metadata,
   targetUserId,
+  isOnMyAniList,
+  isLogIn,
+  logInUserId,
 }: AnimeInfoProps) {
   if (!metadata) {
     return (
@@ -94,9 +100,14 @@ export default async function AnimeInfo({
             />
           </div>
 
-          <Suspense fallback={null}>
-            <UserNotes mediaId={Number(mediaId)} targetUserId={targetUserId} />
-          </Suspense>
+          {isLogIn && !isOnMyAniList && logInUserId == targetUserId ? null : (
+            <Suspense fallback={null}>
+              <UserNotes
+                mediaId={Number(mediaId)}
+                targetUserId={targetUserId}
+              />
+            </Suspense>
+          )}
 
           <div className="h-px w-full bg-linear-to-r from-transparent via-slate-700/60 to-transparent" />
 

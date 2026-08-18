@@ -77,21 +77,19 @@ export default async function animeInfo({
             </div>
             <div className="flex flex-wrap items-center gap-3">
               <BackButton />
+              <Link href="/" className={ctaButtonClass}>
+                <Home className="h-4 w-4" />
+                Back to Home
+              </Link>
 
               {isLoggedIn ? (
                 isOnMyAniList ? (
-                  <>
-                    <Link href="/" className={ctaButtonClass}>
-                      <Home className="h-4 w-4" />
-                      Back to Home
-                    </Link>
-                    <Link
-                      href={`/editAnime/${mediaId}`}
-                      className={ctaButtonClass}
-                    >
-                      <Pencil className="h-4 w-4" /> Edit Anime
-                    </Link>
-                  </>
+                  <Link
+                    href={`/editAnime/${mediaId}`}
+                    className={ctaButtonClass}
+                  >
+                    <Pencil className="h-4 w-4" /> Edit Anime
+                  </Link>
                 ) : (
                   <Link
                     href={{ pathname: "/addAnime", query: { mediaId } }}
@@ -117,6 +115,9 @@ export default async function animeInfo({
           mediaId={Number(mediaId)}
           metadata={metadata}
           targetUserId={Number(userId || fallbackId)}
+          isLogIn={isLoggedIn}
+          isOnMyAniList={isOnMyAniList}
+          logInUserId={Number(fallbackId)}
         />
 
         <RecommendedAnimeForm
