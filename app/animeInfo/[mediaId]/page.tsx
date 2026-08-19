@@ -118,6 +118,7 @@ export default async function animeInfo({
           isLogIn={isLoggedIn}
           isOnMyAniList={isOnMyAniList}
           logInUserId={Number(fallbackId)}
+          saved={saved}
         />
 
         <RecommendedAnimeForm

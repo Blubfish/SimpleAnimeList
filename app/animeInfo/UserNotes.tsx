@@ -1,16 +1,19 @@
 import { fetchUserListEntry } from "@/lib/fetchAnimeById";
 import { PencilIcon, Star } from "lucide-react";
+import { MyAnimeData } from "../type";
 
 type UserNotesProps = {
   mediaId: number;
   targetUserId: number;
+  saved?: MyAnimeData;
 };
 
 export default async function UserNotes({
   mediaId,
   targetUserId,
+  saved,
 }: UserNotesProps) {
-  const entry = await fetchUserListEntry(mediaId, targetUserId);
+  const entry = saved ?? (await fetchUserListEntry(mediaId, targetUserId));
 
   if (!entry) return null;
 
@@ -19,9 +22,7 @@ export default async function UserNotes({
 
   if (!hasNotes && !hasScore) return null;
 
-  if (entry?.score > 10) {
-    entry.score = entry.score / 10;
-  }
+  const displayScore = entry.score > 10 ? entry.score / 10 : entry.score;
 
   return (
     <div className="rounded-2xl border border-orange-400/20 bg-linear-to-br from-orange-500/10 via-slate-800/60 to-slate-800/60 p-5 ring-1 ring-orange-400/20 shadow-lg shadow-orange-500/10">
@@ -38,10 +39,10 @@ export default async function UserNotes({
         </div>
         {hasScore && (
           <span className="inline-flex items-center gap-1 rounded-full bg-orange-500/15 px-2.5 py-1 text-xs sm:text-sm font-semibold text-orange-300 ring-1 ring-orange-400/25">
-            {entry.score === 10 && (
+            {displayScore === 10 && (
               <Star className="h-3.5 w-3.5 fill-current" />
             )}
-            {entry.score}/10
+            {displayScore}/10
           </span>
         )}
       </div>

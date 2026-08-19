@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import UserNotes from "./UserNotes";
 import { Star, Users } from "lucide-react";
 import { sanitizeDescription } from "@/lib/sanitize";
-import { MyAnimeDataMetaData } from "../type";
+import { MyAnimeData, MyAnimeDataMetaData } from "../type";
 
 type AnimeInfoProps = {
   mediaId: number;
@@ -14,6 +14,7 @@ type AnimeInfoProps = {
   isOnMyAniList: boolean;
   isLogIn: boolean;
   logInUserId: number;
+  saved?: MyAnimeData;
 };
 
 export default async function AnimeInfo({
@@ -23,6 +24,7 @@ export default async function AnimeInfo({
   isOnMyAniList,
   isLogIn,
   logInUserId,
+  saved,
 }: AnimeInfoProps) {
   if (!metadata) {
     return (
@@ -105,6 +107,7 @@ export default async function AnimeInfo({
               <UserNotes
                 mediaId={Number(mediaId)}
                 targetUserId={targetUserId}
+                saved={saved}
               />
             </Suspense>
           )}
